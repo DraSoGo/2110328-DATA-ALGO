@@ -1,0 +1,22 @@
+{
+  "id": 1495,
+  "name": "a62_q1a_recur",
+  "title": "Recursive Matrix",
+  "tags": [
+    "D&C"
+  ],
+  "topic": "D&C",
+  "schedule": [
+    {
+      "topic": "D&C",
+      "date": "23 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "output/07.out",
+    "output/08.out",
+    "output/09.out",
+    "output/10.out"
+  ]
+}

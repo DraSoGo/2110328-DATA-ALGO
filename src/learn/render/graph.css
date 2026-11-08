@@ -1,0 +1,43 @@
+.viz.viz-graph{min-width:640px}
+.viz-graph .gnode circle{fill:var(--bg);stroke:var(--muted);stroke-width:1.5}
+.viz-graph .gnode .nid{fill:var(--text);font-size:14px;font-weight:600}
+.viz-graph .gnode .ntag{fill:var(--amber);font-size:11px}
+.viz-graph .gnode.is-visited circle{fill:color-mix(in srgb,var(--cyan) 12%,var(--bg));stroke:var(--cyan)}
+.viz-graph .gnode.is-queued circle{stroke:var(--amber);stroke-width:2.5;stroke-dasharray:4 2}
+.viz-graph .gnode.is-compare circle{stroke:var(--amber);stroke-width:2.5}
+.viz-graph .gnode.is-done circle{fill:color-mix(in srgb,var(--green) 20%,var(--bg));stroke:var(--green)}
+.viz-graph .gnode.is-g0 circle{fill:color-mix(in srgb,var(--cyan) 22%,var(--bg));stroke:var(--cyan)}
+.viz-graph .gnode.is-g1 circle{fill:color-mix(in srgb,var(--amber) 22%,var(--bg));stroke:var(--amber)}
+.viz-graph .gnode.is-g2 circle{fill:color-mix(in srgb,var(--green) 22%,var(--bg));stroke:var(--green)}
+.viz-graph .gnode.is-g3 circle{fill:color-mix(in srgb,var(--red) 22%,var(--bg));stroke:var(--red)}
+.viz-graph .gnode.is-active circle{fill:var(--cyan-soft);stroke:var(--cyan);stroke-width:3}
+.viz-graph .gnode.is-bad circle{fill:color-mix(in srgb,var(--red) 25%,var(--bg));stroke:var(--red);stroke-width:3}
+.viz-graph .eline{stroke:var(--muted);stroke-width:2;fill:none}
+.viz-graph .earrow{fill:var(--muted);stroke:none}
+.viz-graph .wlabel{fill:var(--muted);font-size:11px;stroke:var(--bg);stroke-width:4;paint-order:stroke}
+.viz-graph .edge.is-removed .eline{stroke-dasharray:3 4;opacity:.5}
+.viz-graph .edge.is-removed .earrow{opacity:.5}
+.viz-graph .edge.is-tree .eline,.viz-graph .edge.is-relaxed .eline{stroke:var(--cyan);stroke-width:3}
+.viz-graph .edge.is-tree .earrow,.viz-graph .edge.is-relaxed .earrow{fill:var(--cyan)}
+.viz-graph .edge.is-mst .eline{stroke:var(--green);stroke-width:4}
+.viz-graph .edge.is-mst .earrow{fill:var(--green)}
+.viz-graph .edge.is-rejected .eline{stroke:var(--red);stroke-dasharray:6 4}
+.viz-graph .edge.is-rejected .earrow{fill:var(--red)}
+.viz-graph .edge.is-bad .eline{stroke:var(--red);stroke-width:4}
+.viz-graph .edge.is-bad .earrow{fill:var(--red)}
+.viz-graph .edge.is-current .eline{stroke:var(--amber);stroke-width:4}
+.viz-graph .edge.is-current .earrow{fill:var(--amber)}
+.viz-graph .edge.is-current .wlabel,.viz-graph .edge.is-mst .wlabel{fill:var(--text)}
+.viz-graph .ptitle{fill:var(--muted);font-size:11px}
+.viz-graph .thead{fill:var(--muted);font-size:11px}
+.viz-graph .tcell rect{fill:none;stroke:var(--line)}
+.viz-graph .tcell text{fill:var(--text);font-size:11px}
+.viz-graph .tcell.is-cur rect{fill:var(--cyan-soft);stroke:var(--cyan)}
+.viz-graph .tcell.is-ref rect{stroke:var(--amber);stroke-width:2}
+.viz-graph .tcell.is-upd rect{fill:color-mix(in srgb,var(--green) 22%,var(--bg));stroke:var(--green)}
+.viz-graph .pitem text{font-size:12px}
+.viz-graph .pitem.is-accepted rect{fill:color-mix(in srgb,var(--green) 18%,var(--bg));stroke:var(--green)}
+.viz-graph .pitem.is-rejected rect{stroke:var(--red);stroke-dasharray:4 3}
+.viz-graph .pitem.is-current rect{fill:var(--cyan-soft);stroke:var(--cyan);stroke-width:2.5}
+.viz-graph .gnode circle,.viz-graph .edge line,.viz-graph .edge polygon{transition:fill var(--viz-dur),stroke var(--viz-dur),stroke-width var(--viz-dur)}
+@media (prefers-reduced-motion:reduce){.viz-graph [data-key] circle,.viz-graph [data-key] line,.viz-graph [data-key] polygon{transition:none}}

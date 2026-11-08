@@ -1,0 +1,24 @@
+{
+  "id": 1527,
+  "name": "da66_f1_sea_bridge",
+  "title": "Sea Bridge",
+  "tags": [],
+  "topic": "ซ้อม Final",
+  "schedule": [
+    {
+      "topic": "ซ้อม Final",
+      "date": "1 Dec",
+      "session": ""
+    }
+  ],
+  "testcase_truncated": [
+    "input/14.in",
+    "input/15.in",
+    "input/16.in",
+    "input/17.in",
+    "input/18.in",
+    "input/19.in",
+    "input/20.in"
+  ],
+  "source": "Final 2023 #4"
+}

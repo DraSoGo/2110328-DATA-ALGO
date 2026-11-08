@@ -1,0 +1,17 @@
+{
+  "id": 1448,
+  "name": "d63_q2a_pair_gte",
+  "title": "Pair GTE",
+  "tags": [
+    ".h"
+  ],
+  "topic": "pair",
+  "schedule": [
+    {
+      "topic": "pair",
+      "date": "3 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": []
+}

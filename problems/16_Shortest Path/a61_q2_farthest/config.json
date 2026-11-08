@@ -1,0 +1,26 @@
+{
+  "id": 1523,
+  "name": "a61_q2_farthest",
+  "title": "เมืองไกลสุด",
+  "tags": [
+    "Graph",
+    "S-Path"
+  ],
+  "topic": "Shortest Path",
+  "schedule": [
+    {
+      "topic": "Shortest Path",
+      "date": "30 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

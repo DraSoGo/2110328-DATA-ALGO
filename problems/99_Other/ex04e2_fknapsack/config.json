@@ -1,0 +1,12 @@
+{
+  "id": 1516,
+  "name": "ex04e2_fknapsack",
+  "title": "Fractional Knapsack",
+  "tags": [],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/05.in",
+    "input/06.in"
+  ]
+}

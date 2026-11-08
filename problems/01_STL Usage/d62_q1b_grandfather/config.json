@@ -1,0 +1,37 @@
+{
+  "id": 1446,
+  "name": "d62_q1b_grandfather",
+  "title": "Grandfather",
+  "tags": [
+    "stl",
+    "set-map"
+  ],
+  "topic": "STL Usage",
+  "schedule": [
+    {
+      "topic": "STL Usage",
+      "date": "2 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/01.in",
+    "input/02.in",
+    "input/03.in",
+    "output/03.out",
+    "input/04.in",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out",
+    "input/07.in",
+    "output/07.out",
+    "input/08.in",
+    "output/08.out",
+    "input/09.in",
+    "output/09.out",
+    "input/10.in",
+    "output/10.out"
+  ]
+}

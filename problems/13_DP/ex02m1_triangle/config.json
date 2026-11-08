@@ -1,0 +1,22 @@
+{
+  "id": 1592,
+  "name": "ex02m1_triangle",
+  "title": "Number Triangles",
+  "tags": [
+    "DP"
+  ],
+  "topic": "DP",
+  "schedule": [
+    {
+      "topic": "DP",
+      "date": "24 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

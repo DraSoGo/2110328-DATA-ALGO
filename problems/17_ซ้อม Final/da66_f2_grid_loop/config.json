@@ -1,0 +1,33 @@
+{
+  "id": 1534,
+  "name": "da66_f2_grid_loop",
+  "title": "Grid Loop",
+  "tags": [],
+  "topic": "ซ้อม Final",
+  "schedule": [
+    {
+      "topic": "ซ้อม Final",
+      "date": "1 Dec",
+      "session": ""
+    }
+  ],
+  "testcase_truncated": [
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in",
+    "input/11.in",
+    "input/12.in",
+    "input/13.in",
+    "input/14.in",
+    "input/15.in",
+    "input/16.in",
+    "input/17.in",
+    "input/18.in",
+    "input/19.in",
+    "input/20.in"
+  ]
+}

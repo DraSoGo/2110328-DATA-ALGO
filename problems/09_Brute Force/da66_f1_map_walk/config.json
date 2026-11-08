@@ -1,0 +1,27 @@
+{
+  "id": 1528,
+  "name": "da66_f1_map_walk",
+  "title": "Map Walk",
+  "tags": [],
+  "topic": "Brute Force",
+  "schedule": [
+    {
+      "topic": "Brute Force",
+      "date": "16 Nov",
+      "session": "การบ้าน"
+    },
+    {
+      "topic": "ซ้อม Final",
+      "date": "1 Dec",
+      "session": ""
+    }
+  ],
+  "testcase_truncated": [
+    "output/13.out",
+    "output/16.out",
+    "output/17.out",
+    "output/18.out",
+    "output/19.out",
+    "output/20.out"
+  ]
+}

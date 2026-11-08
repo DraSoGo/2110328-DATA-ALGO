@@ -1,0 +1,7 @@
+.viz-timeline .row-label{fill:var(--muted);font-size:12px}
+.viz-timeline .guide{stroke:var(--line);stroke-dasharray:2 4}
+.viz-timeline .axis,.viz-timeline .tick{stroke:var(--muted)}
+.viz-timeline .mark{stroke:var(--amber);stroke-dasharray:4 3;stroke-width:1.5}
+.viz-timeline .mark-label{fill:var(--amber);font-size:12px}
+.viz-timeline .item rect{transition:fill var(--viz-dur),stroke var(--viz-dur),width var(--viz-dur)}
+.viz-timeline .item text{font-size:12px}

@@ -1,0 +1,17 @@
+{
+  "id": 1518,
+  "name": "ex04e1_interval",
+  "title": "Interval Selection",
+  "tags": [],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

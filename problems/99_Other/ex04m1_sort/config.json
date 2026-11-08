@@ -1,0 +1,17 @@
+{
+  "id": 1492,
+  "name": "ex04m1_sort",
+  "title": "3 Values Sort",
+  "tags": [],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/03.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

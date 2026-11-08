@@ -1,0 +1,17 @@
+{
+  "id": 1503,
+  "name": "ex02e2_cnk",
+  "title": "Binomial Coefficient",
+  "tags": [
+    "DP"
+  ],
+  "topic": "DP",
+  "schedule": [
+    {
+      "topic": "DP",
+      "date": "24 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": []
+}

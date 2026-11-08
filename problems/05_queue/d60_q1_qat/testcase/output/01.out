@@ -1,0 +1,18 @@
+Queue size = 1 Data = 252 
+Data at 0 is 252
+Queue size = 2 Data = 252 779 
+Queue size = 1 Data = 779 
+Data at 1 is 362
+Queue size = 2 Data = 779 362 
+Queue size = 3 Data = 779 362 629 
+Queue size = 2 Data = 362 629 
+Data at 1 is 629
+Data at 3 is 128
+Queue size = 6 Data = 362 629 452 128 928 958 
+Data at 0 is 629
+Queue size = 6 Data = 629 452 128 928 958 224 
+Data at 3 is 958
+Queue size = 5 Data = 452 128 928 958 224 
+Data at 0 is 452
+Queue size = 6 Data = 452 128 928 958 224 225 
+Exit

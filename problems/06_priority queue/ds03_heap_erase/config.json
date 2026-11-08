@@ -1,0 +1,18 @@
+{
+  "id": 1463,
+  "name": "ds03_heap_erase",
+  "title": "Heap Erase",
+  "tags": [
+    ".h",
+    "heap"
+  ],
+  "topic": "priority queue",
+  "schedule": [
+    {
+      "topic": "priority queue",
+      "date": "10 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": 1510,
+  "name": "ex05m2_connection",
+  "title": "Connection",
+  "tags": [
+    "Graph",
+    "BFS"
+  ],
+  "topic": "Graph 1",
+  "schedule": [
+    {
+      "topic": "Graph 1",
+      "date": "25 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": 1653,
+  "name": "a66_q1a_day_cover",
+  "title": "Day Cover",
+  "tags": [],
+  "topic": "Brute Force",
+  "schedule": [
+    {
+      "topic": "Brute Force",
+      "date": "16 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/01.in",
+    "input/02.in",
+    "input/06.in",
+    "input/07.in",
+    "input/09.in",
+    "input/10.in",
+    "input/11.in",
+    "input/12.in",
+    "input/13.in",
+    "input/14.in",
+    "input/15.in",
+    "input/16.in",
+    "input/17.in",
+    "input/18.in",
+    "input/19.in",
+    "input/20.in"
+  ]
+}

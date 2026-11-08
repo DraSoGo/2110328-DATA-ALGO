@@ -1,0 +1,40 @@
+{
+  "id": 1529,
+  "name": "da66_f1_buffet_flight",
+  "title": "Buffet Flight",
+  "tags": [],
+  "topic": "ซ้อม Final",
+  "schedule": [
+    {
+      "topic": "ซ้อม Final",
+      "date": "1 Dec",
+      "session": ""
+    }
+  ],
+  "testcase_truncated": [
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out",
+    "input/07.in",
+    "input/08.in",
+    "input/10.in",
+    "input/11.in",
+    "input/12.in",
+    "input/13.in",
+    "input/14.in",
+    "output/14.out",
+    "input/15.in",
+    "output/15.out",
+    "input/16.in",
+    "output/16.out",
+    "input/17.in",
+    "output/17.out",
+    "input/18.in",
+    "output/18.out",
+    "input/19.in",
+    "output/19.out",
+    "input/20.in",
+    "output/20.out"
+  ]
+}

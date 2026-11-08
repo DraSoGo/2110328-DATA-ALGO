@@ -1,0 +1,14 @@
+{
+  "id": 1663,
+  "name": "da68_f_k_connected_city",
+  "title": "K Connected City",
+  "tags": [
+    "Graph",
+    "DFS",
+    "BFS"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [],
+  "source": "Final 2025 #5"
+}

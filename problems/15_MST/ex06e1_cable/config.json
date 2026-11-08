@@ -1,0 +1,27 @@
+{
+  "id": 1514,
+  "name": "ex06e1_cable",
+  "title": "Cable Company",
+  "tags": [
+    "Graph",
+    "MST"
+  ],
+  "topic": "MST",
+  "schedule": [
+    {
+      "topic": "MST",
+      "date": "26 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/03.in",
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

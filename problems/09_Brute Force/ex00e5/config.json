@@ -1,0 +1,21 @@
+{
+  "id": 1491,
+  "name": "ex00e5",
+  "title": "Consecutive Ones",
+  "tags": [
+    "D&C"
+  ],
+  "topic": "Brute Force",
+  "schedule": [
+    {
+      "topic": "Brute Force",
+      "date": "16 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "output/06.out",
+    "output/07.out",
+    "output/10.out"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": 1447,
+  "name": "d62_q2b_vector_insert_many",
+  "title": "Insert Many",
+  "tags": [
+    "vector",
+    ".h"
+  ],
+  "topic": "vector",
+  "schedule": [
+    {
+      "topic": "vector",
+      "date": "3 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/06.in",
+    "output/06.out",
+    "input/07.in",
+    "output/07.out",
+    "input/08.in",
+    "output/08.out",
+    "input/09.in",
+    "output/09.out",
+    "input/10.in",
+    "output/10.out"
+  ]
+}

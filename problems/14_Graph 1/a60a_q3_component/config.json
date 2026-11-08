@@ -1,0 +1,21 @@
+{
+  "id": 1508,
+  "name": "a60a_q3_component",
+  "title": "Connected Component",
+  "tags": [
+    "Graph"
+  ],
+  "topic": "Graph 1",
+  "schedule": [
+    {
+      "topic": "Graph 1",
+      "date": "25 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

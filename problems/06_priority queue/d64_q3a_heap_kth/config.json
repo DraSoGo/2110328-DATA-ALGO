@@ -1,0 +1,22 @@
+{
+  "id": 1460,
+  "name": "d64_q3a_heap_kth",
+  "title": "Heap K-th",
+  "tags": [
+    ".h",
+    "heap"
+  ],
+  "topic": "priority queue",
+  "schedule": [
+    {
+      "topic": "priority queue",
+      "date": "10 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/04.in",
+    "input/05.in",
+    "input/06.in"
+  ]
+}

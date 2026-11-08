@@ -1,0 +1,16 @@
+.viz-table .head{fill:var(--muted);font-size:12px}
+.viz-table .caption{fill:var(--text);font-size:13px}
+.viz-table .cell.is-compare rect{fill:color-mix(in srgb,var(--amber) 14%,var(--bg))}
+.viz-table .cell.is-path rect{fill:color-mix(in srgb,var(--cyan) 22%,var(--bg));stroke:var(--cyan);stroke-width:2.5}
+.viz-table .cell.is-path text{font-weight:700}
+.viz-table:not(.is-board) .cell.is-shaded rect{fill:color-mix(in srgb,var(--muted) 18%,var(--bg))}
+.viz-table .arrow line{stroke:var(--amber);stroke-width:2}
+.viz-table .arrow polygon{fill:var(--amber);stroke:none}
+.viz-table .arrow{pointer-events:none}
+.viz-table.is-board .cell text{font-size:26px}
+.viz-table.is-board .cell.is-light rect{fill:var(--bg);stroke:var(--line)}
+.viz-table.is-board .cell.is-dark rect{fill:color-mix(in srgb,var(--muted) 22%,var(--bg));stroke:var(--line)}
+.viz-table.is-board .cell.is-shaded rect{fill:color-mix(in srgb,var(--red) 22%,var(--bg))}
+.viz-table.is-board .cell.is-done rect{fill:color-mix(in srgb,var(--green) 22%,var(--bg));stroke:var(--green)}
+.viz-table.is-board .cell.is-compare rect{fill:color-mix(in srgb,var(--red) 35%,var(--bg));stroke:var(--red)}
+.viz-table.is-board .cell.is-active rect{fill:var(--cyan-soft);stroke:var(--cyan)}

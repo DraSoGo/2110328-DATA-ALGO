@@ -1,0 +1,18 @@
+{
+  "id": 1469,
+  "name": "ds04_playlist",
+  "title": "Playlist Management",
+  "tags": [
+    ".h",
+    "list"
+  ],
+  "topic": "list",
+  "schedule": [
+    {
+      "topic": "list",
+      "date": "11 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": []
+}

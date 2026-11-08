@@ -1,0 +1,23 @@
+{
+  "id": 1467,
+  "name": "d58_q3_list_replace",
+  "title": "List Replace",
+  "tags": [
+    ".h",
+    "list"
+  ],
+  "topic": "list",
+  "schedule": [
+    {
+      "topic": "list",
+      "date": "11 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/09.in",
+    "output/09.out",
+    "input/10.in",
+    "output/10.out"
+  ]
+}

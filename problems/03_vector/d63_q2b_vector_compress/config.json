@@ -1,0 +1,22 @@
+{
+  "id": 1449,
+  "name": "d63_q2b_vector_compress",
+  "title": "Vector Compress",
+  "tags": [
+    "vector",
+    ".h"
+  ],
+  "topic": "vector",
+  "schedule": [
+    {
+      "topic": "vector",
+      "date": "3 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "output/03.out",
+    "output/04.out",
+    "output/05.out"
+  ]
+}

@@ -1,0 +1,109 @@
+.learn-layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:24px;margin-top:20px}
+.module-list{display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line);padding-right:16px}
+.module-group{font:600 10px/1 var(--mono);letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin:12px 0 4px}
+.module-link{font:13px/1.2 var(--mono);color:var(--muted);text-decoration:none;padding:7px 8px;border:1px solid transparent}
+.module-link:hover,.module-link.active{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-soft)}
+.stage-empty{border:1px dashed var(--line);padding:32px;color:var(--muted)}
+.stage-empty h2{color:var(--text);margin:0 0 8px}
+.stage-head h1{font:700 clamp(28px,4vw,40px)/1 var(--mono);color:var(--text);margin:0}
+.stage-head p{color:var(--muted);margin:8px 0 16px}
+.op-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.op-bar button,.op-actions button,.algo-input button,.player button,.player select{font:12px/1 var(--mono);color:var(--text);background:var(--panel);border:1px solid var(--line);padding:8px 12px;cursor:pointer}
+.op-bar button:hover,.op-actions button:hover,.player button:hover{border-color:var(--cyan);color:var(--cyan)}
+.op-bar button[aria-pressed=true]{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-soft)}
+.op-bar button:focus-visible,.player button:focus-visible,.run-button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.learn-view .run-button{color:var(--bg);background:var(--cyan);border-color:var(--cyan)}
+/* One column: the module stage is at most ~840px wide, too narrow for code beside a 480-660px picture. */
+.code-panel{background:var(--panel);border:1px solid var(--line);padding:12px}
+.code-block{margin:0;font:13px/1.7 var(--mono);overflow:auto;background:var(--panel);border:1px solid var(--line);padding:10px 0}
+.code-panel .code-block{border:0;padding:0;background:transparent}
+.code-line{display:block;padding:0 10px;border-left:2px solid transparent;white-space:pre}
+.code-line i{display:inline-block;width:2.2em;color:var(--faint);font-style:normal;user-select:none}
+.code-line.muted{color:var(--muted)}
+.code-line.is-current{background:var(--cyan-soft);border-left-color:var(--cyan)}
+.op-arg{width:3.6em;font:inherit;color:var(--cyan);background:var(--bg);border:1px solid var(--cyan);padding:0 4px}
+.op-actions{display:flex;gap:6px;margin-top:10px}
+.op-error{color:var(--red);font:12px/1.4 var(--mono);min-height:1.4em;margin:8px 0 0}
+.step-msg{color:var(--text);font:15px/1.5 var(--sans);min-height:2.6em;margin:10px 0 0;padding:8px 12px;border-left:3px solid var(--cyan);background:var(--cyan-soft)}
+.viz-host{background:var(--panel);border:1px solid var(--line);padding:12px;min-height:160px;overflow:hidden;--viz-dur:300ms}
+.viz{width:100%;max-width:min(100%,var(--viz-max,100%));height:auto;max-height:min(62vh,560px);display:block;margin:0 auto;font-family:var(--mono);stroke-width:1}
+.viz text{stroke:none}
+.viz .slot{fill:none;stroke:var(--line)}
+.viz .slot.spare{stroke-dasharray:4 4}
+.viz .index{fill:var(--muted);font-size:11px}
+.viz .item rect{fill:var(--bg);stroke:var(--muted);stroke-width:1.5}
+.viz .item text{fill:var(--text);font-size:14px}
+.viz .item.is-done rect{fill:color-mix(in srgb,var(--green) 18%,var(--bg))}
+.viz .item.is-moved rect{stroke:var(--green)}
+.viz .item.is-compare rect{stroke:var(--amber);stroke-width:2.5}
+.viz .item.is-active rect{fill:var(--cyan-soft);stroke:var(--cyan);stroke-width:2.5}
+.viz .item.is-lifted rect{stroke:var(--cyan);stroke-dasharray:5 3}
+.viz .pointer text{fill:var(--amber);font-size:12px}
+.viz [data-key]{transition:transform var(--viz-dur) ease}
+.viz [data-key] rect{transition:fill var(--viz-dur),stroke var(--viz-dur)}
+.player{position:sticky;bottom:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0 0;padding:10px 12px;background:var(--panel);border:1px solid var(--line);box-shadow:0 -8px 18px color-mix(in srgb,var(--bg) 70%,transparent)}
+.player-range{flex:1;min-width:120px;accent-color:var(--cyan)}
+.player-count{font:12px/1 var(--mono);color:var(--muted);min-width:5em;text-align:right}
+.player-speed{font:12px/1 var(--mono);color:var(--muted);display:flex;gap:6px;align-items:center}
+.history{font:12px/1.5 var(--mono);color:var(--muted)}
+.history span{margin-right:8px;color:var(--faint)}
+.history-list{color:var(--cyan);white-space:pre-wrap}
+.algo-input{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
+.algo-input label{display:flex;flex-direction:column;gap:4px;font:12px/1 var(--mono);color:var(--muted);flex:1;min-width:200px}
+.algo-input input{font:14px/1 var(--mono);color:var(--text);background:var(--bg);border:1px solid var(--line);padding:9px}
+.algo-input .op-error{flex-basis:100%;margin:0}
+.vars-panel{display:flex;flex-direction:column;gap:6px;margin:0;min-height:30px}
+.vars-panel div{border:1px solid var(--line);padding:6px 10px;font:12px/1 var(--mono);display:flex;gap:8px}
+.vars-panel dt{color:var(--muted)}
+.vars-panel dd{margin:0;color:var(--cyan)}
+@media (prefers-reduced-motion:reduce){.viz [data-key],.viz [data-key] rect{transition:none}}
+@media (max-width:900px){
+  .learn-layout{grid-template-columns:minmax(0,1fr)}
+  .module-list{flex-direction:row;flex-wrap:wrap;border-right:0;padding-right:0}
+  .module-group{flex-basis:100%}
+}
+.module-link{display:flex;flex-direction:column;gap:3px}
+.module-link small{color:var(--faint);font:10px/1.2 var(--mono)}
+.module-link.active small{color:var(--muted)}
+.op-bar button small{display:block;margin-top:4px;color:var(--amber);font:10px/1 var(--mono)}
+.complexity{margin:0 0 16px;border:1px solid var(--line);background:var(--panel);padding:10px 12px}
+.complexity-title{margin:0 0 8px;color:var(--muted);font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.complexity dl{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.complexity dl div{display:flex;gap:8px;align-items:baseline;padding:6px 10px;border:1px solid var(--line);font:12px/1 var(--mono)}
+.complexity dt{color:var(--muted)}
+.complexity dd{margin:0;color:var(--amber);font-weight:600}
+.complexity .is-space dd{color:var(--cyan)}
+.complexity-note{margin:8px 0 0;color:var(--muted);font:12px/1.5 var(--sans)}
+.learn-view .run-button:hover{color:var(--bg);background:color-mix(in srgb,var(--cyan) 80%,white);border-color:var(--cyan)}
+.viz.viz-column{width:auto;min-width:0;max-width:100%;height:min(56vh,420px);margin:0 auto}
+.algo-input select,.algo-input textarea{font:13px/1.5 var(--mono);color:var(--text);background:var(--bg);border:1px solid var(--line);padding:8px}
+.algo-input .graph-field{flex-basis:100%}
+.algo-input .graph-field textarea{resize:vertical;min-height:7em}
+.algo-input .graph-field small{color:var(--faint);font:11px var(--mono)}
+.algo-input .node-field{flex:0 0 auto;min-width:110px}
+.slide-links{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 14px}
+.slide-links>span{color:var(--faint);font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-right:4px}
+.slide-links a,.slide-index a{display:inline-flex;gap:8px;align-items:baseline;padding:6px 10px;border:1px solid var(--line);color:var(--text);text-decoration:none;font:12px/1.2 var(--sans)}
+.slide-links a:hover,.slide-index a:hover{border-color:var(--cyan);color:var(--cyan)}
+.slide-links small,.slide-index small{color:var(--faint);font:10px var(--mono)}
+.slide-index{margin-top:36px}
+.slide-index h2{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.slide-index>div{margin-bottom:18px}
+.slide-index h3{font:600 14px/1 var(--sans);color:var(--text);margin:0 0 8px}
+.slide-index ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px}
+.slide-index a{display:flex;justify-content:space-between;width:100%}
+/* The module list is its own scroll column: it stays put while the content scrolls, and scrolling it never moves the content. */
+.learn-layout{align-items:start}
+.module-list{position:sticky;top:12px;max-height:calc(100vh - var(--topbar) - 24px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+@media (max-width:900px){.module-list{position:static;max-height:none;overflow:visible}}
+/* Stage layout: picture full width, message under it, then code beside the variables, player pinned at the bottom. */
+.data-code{margin-bottom:14px}
+.data-code .code-block{white-space:pre;overflow-x:auto}
+.algo-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,240px);gap:14px;align-items:start;margin-top:14px}
+.algo-detail .code-block{max-height:60vh}
+.vars-box{position:sticky;top:12px;background:var(--panel);border:1px solid var(--line);padding:10px 12px}
+.vars-title{margin:0 0 8px;color:var(--faint);font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.vars-panel div{justify-content:space-between;overflow-wrap:anywhere}
+.history{margin-top:10px}
+@media (max-width:1100px){.algo-detail{grid-template-columns:minmax(0,1fr)}.vars-box{position:static}.vars-panel{flex-direction:row;flex-wrap:wrap}}
+

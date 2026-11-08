@@ -1,0 +1,25 @@
+{
+  "id": 1472,
+  "name": "d60_q3_same_tree",
+  "title": "ต้นไม้เหมือน",
+  "tags": [
+    ".h",
+    "bst"
+  ],
+  "topic": "Binary Tree",
+  "schedule": [
+    {
+      "topic": "Binary Tree",
+      "date": "12 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

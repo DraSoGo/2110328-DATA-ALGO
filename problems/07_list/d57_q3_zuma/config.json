@@ -1,0 +1,23 @@
+{
+  "id": 1466,
+  "name": "d57_q3_zuma",
+  "title": "Zuma",
+  "tags": [
+    "list"
+  ],
+  "topic": "list",
+  "schedule": [
+    {
+      "topic": "list",
+      "date": "11 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/09.in",
+    "input/10.in",
+    "input/11.in",
+    "input/12.in",
+    "input/13.in"
+  ]
+}

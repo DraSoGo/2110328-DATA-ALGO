@@ -1,0 +1,23 @@
+{
+  "id": 1513,
+  "name": "ex05m1_cycle",
+  "title": "Detecting Cycle",
+  "tags": [
+    "Graph"
+  ],
+  "topic": "Graph 1",
+  "schedule": [
+    {
+      "topic": "Graph 1",
+      "date": "25 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

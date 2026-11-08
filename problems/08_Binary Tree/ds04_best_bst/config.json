@@ -1,0 +1,22 @@
+{
+  "id": 1478,
+  "name": "ds04_best_bst",
+  "title": "Optimal Binary Search Tree",
+  "tags": [
+    "bst"
+  ],
+  "topic": "Binary Tree",
+  "schedule": [
+    {
+      "topic": "Binary Tree",
+      "date": "12 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "output/07.out",
+    "output/08.out",
+    "output/09.out",
+    "output/10.out"
+  ]
+}

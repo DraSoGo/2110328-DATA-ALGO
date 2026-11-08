@@ -1,0 +1,27 @@
+{
+  "id": 1521,
+  "name": "ex06e2_shortest",
+  "title": "Shortest Path with Negative Edge",
+  "tags": [
+    "Graph",
+    "S-Path"
+  ],
+  "topic": "Shortest Path",
+  "schedule": [
+    {
+      "topic": "Shortest Path",
+      "date": "30 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/03.in",
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

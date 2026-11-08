@@ -1,0 +1,21 @@
+{
+  "id": 1477,
+  "name": "d61_q2_imbalance",
+  "title": "Imbalance",
+  "tags": [
+    ".h",
+    "bst"
+  ],
+  "topic": "Binary Tree",
+  "schedule": [
+    {
+      "topic": "Binary Tree",
+      "date": "12 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/07.in",
+    "input/08.in"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": 1511,
+  "name": "a59_q3_cycle",
+  "title": "Cycle in Tree",
+  "tags": [
+    "Graph",
+    "DFS"
+  ],
+  "topic": "Graph 1",
+  "schedule": [
+    {
+      "topic": "Graph 1",
+      "date": "25 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in",
+    "input/11.in",
+    "input/12.in",
+    "input/13.in",
+    "input/14.in",
+    "input/15.in"
+  ]
+}

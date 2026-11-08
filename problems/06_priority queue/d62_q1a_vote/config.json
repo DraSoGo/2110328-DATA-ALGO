@@ -1,0 +1,20 @@
+{
+  "id": 1462,
+  "name": "d62_q1a_vote",
+  "title": "Vote",
+  "tags": [
+    "stl",
+    "set-map"
+  ],
+  "topic": "priority queue",
+  "schedule": [
+    {
+      "topic": "priority queue",
+      "date": "10 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/03.in"
+  ]
+}

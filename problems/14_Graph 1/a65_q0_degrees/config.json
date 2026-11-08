@@ -1,0 +1,23 @@
+{
+  "id": 1595,
+  "name": "a65_q0_degrees",
+  "title": "Degree in Graph",
+  "tags": [
+    "Graph"
+  ],
+  "topic": "Graph 1",
+  "schedule": [
+    {
+      "topic": "Graph 1",
+      "date": "25 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/01.in",
+    "input/02.in",
+    "input/03.in",
+    "input/04.in",
+    "input/05.in"
+  ]
+}

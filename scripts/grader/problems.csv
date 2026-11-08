@@ -1,0 +1,95 @@
+วันที่,หัวข้อ,ช่วงเวลา,ชื่อโจทย์
+2 Nov,STL Usage,บ่าย,ds00_reverse2
+2 Nov,STL Usage,บ่าย,d63_q1a_multi_insert
+2 Nov,STL Usage,บ่าย,d63_q1b_interval_count
+2 Nov,STL Usage,การบ้าน,d62_q1b_grandfather
+2 Nov,STL Usage,การบ้าน,ex00e3
+3 Nov,pair,บ่าย,d63_q2a_pair_gte
+3 Nov,vector,บ่าย,d58_q1_erase_many
+3 Nov,vector,บ่าย,d59_q1_range_insert
+3 Nov,vector,บ่าย,d63_q2b_vector_compress
+3 Nov,STL Usage,การบ้าน,d60_q1_v_uniq
+3 Nov,STL Usage,การบ้าน,d61_q1_ordered_set
+3 Nov,vector,การบ้าน,d62_q2b_vector_insert_many
+4 Nov,STL Usage,บ่าย,d63_q1a_hiatus
+4 Nov,STL Usage,บ่าย,d65_q1c_ice_cream
+4 Nov,vector,การบ้าน,d64_q2a_vector_block_swap
+4 Nov,vector,การบ้าน,-- เดี๋ยวมาเติม --
+4 Nov,vector,การบ้าน,-- เดี๋ยวมาเติม --
+9 Nov,stack,บ่าย,d62_q2b_stack_deep_push
+9 Nov,stack,บ่าย,d65_q2a_mitosis
+9 Nov,queue,บ่าย,d63_q3a_queue_m2b
+9 Nov,queue,บ่าย,d65_q3b_queue_total_reverse
+9 Nov,queue,การบ้าน,d62_q3b_queue_m2f
+9 Nov,queue,การบ้าน,d60_q1_qat
+9 Nov,queue,การบ้าน,d64_q3b_queue_reverse
+10 Nov,priority queue,บ่าย,d62_q1a_vote
+10 Nov,priority queue,บ่าย,d58_q2_custom
+10 Nov,priority queue,บ่าย,d64_q3a_heap_kth
+10 Nov,priority queue,การบ้าน,ds03_heap_erase
+10 Nov,priority queue,การบ้าน,d62_q3a_heap_descendant
+10 Nov,priority queue,การบ้าน,d63_q3a_rank_in_heap
+11 Nov,list,บ่าย,d58_q3_list_replace
+11 Nov,list,บ่าย,d61_q2_splitlist
+11 Nov,list,บ่าย,d57_q3_zuma
+11 Nov,list,การบ้าน,ds04_playlist
+11 Nov,list,การบ้าน,d57_q3_shift
+11 Nov,list,การบ้าน,d64_q4a_list_merge
+12 Nov,Binary Tree,บ่าย,d60_q3_same_tree
+12 Nov,Binary Tree,บ่าย,d63_q4a_leaves_count
+12 Nov,Binary Tree,บ่าย,d64_q4a_subtree
+12 Nov,Binary Tree,การบ้าน,d58_q3_unary
+12 Nov,Binary Tree,การบ้าน,d59_q3_bst_split
+12 Nov,Binary Tree,บ่าย,d61_q2_imbalance
+12 Nov,Binary Tree,บ่าย,ds04_best_bst
+16 Nov,Brute Force,บ่าย,a64_q1_permu_before
+16 Nov,Brute Force,บ่าย,ex00e4
+16 Nov,Brute Force,บ่าย,ex00e5
+16 Nov,Brute Force,การบ้าน,a66_q1a_day_cover
+16 Nov,Brute Force,การบ้าน,da66_f1_map_walk
+17 Nov,Sort,บ่าย,a66_q2a_insertion_count
+17 Nov,Sort,บ่าย,a65_q2a_huge_array
+18 Nov,ซ้อม Midterm,บ่าย,da66_m1_queue_remove_many
+18 Nov,ซ้อม Midterm,บ่าย,da66_m1_heap_before_node
+18 Nov,ซ้อม Midterm,บ่าย,da66_m1_tree_leaves_depth
+19 Nov,ซ้อม Midterm,บ่าย,da66_m1_line_monopoly
+19 Nov,ซ้อม Midterm,บ่าย,da66_m2_change_data
+19 Nov,ซ้อม Midterm,บ่าย,da66_m2_furthest_distance
+19 Nov,ซ้อม Midterm,การบ้าน,da67_m2_dungeon
+19 Nov,ซ้อม Midterm,การบ้าน,da67_m2_queue_insert_shuffle
+19 Nov,ซ้อม Midterm,การบ้าน,da67_m2_list_zigzag
+19 Nov,ซ้อม Midterm,การบ้นา,da67_m2_bst_parity_score
+23 Nov,D&C,บ่าย,a62_q1a_recur
+23 Nov,D&C,บ่าย,a62_q1b_virus
+23 Nov,D&C,บ่าย,ex01e3
+23 Nov,D&C,การบ้าน,a63_q1b_virus2
+23 Nov,D&C,การบ้าน,ex02e3_bs
+24 Nov,DP,การบ้าน,a64_q1_lawn_mowing
+24 Nov,DP,การบ้าน,a60_q1_matmod
+24 Nov,DP,บ่าย,a64_q2_table_no_11
+24 Nov,DP,บ่าย,ex02e1_fibo
+24 Nov,DP,บ่าย,ex02e2_cnk
+24 Nov,DP,การบ้าน,a60b_q1_diagsum
+24 Nov,DP,การบ้าน,a62_q1b_chocolate
+24 Nov,DP,การบ้าน,ex02m1_triangle
+25 Nov,Graph 1,บ่าย,a65_q0_degrees
+25 Nov,Graph 1,บ่าย,ex05m1_cycle
+25 Nov,Graph 1,บ่าย,a60a_q3_component
+25 Nov,Graph 1,การบ้าน,ex05m2_connection
+25 Nov,Graph 1,การบ้าน,a62_q2a_line_graph
+25 Nov,Graph 1,การบ้าน,a59_q3_cycle
+25 Nov,Graph 1,การบ้าน,a62_q2a_pandemic
+26 Nov,MST,บ่าย,ex06e1_cable
+26 Nov,MST,บ่าย,a60a_q3_xor_road
+30 Nov,Shortest Path,บ่าย,a61_q2_farthest
+30 Nov,Shortest Path,บ่าย,ex06e2_shortest
+30 Nov,Shortest Path,บ่าย,ex06m2_exchange.:
+30 Nov,Shortest Path,การบ้าน,ex06e3_columbia
+30 Nov,Shortest Path,การบ้าน,a58_q3_p3a_hacking
+30 Nov,Shortest Path,การบ้าน,a65_q3a_expressway
+1 Dec,ซ้อม Final,,da66_f1_linear_recurrence
+1 Dec,ซ้อม Final,,da66_f1_buffet_flight
+1 Dec,ซ้อม Final,,da66_f1_map_walk
+1 Dec,ซ้อม Final,,da66_f1_sea_bridge
+1 Dec,ซ้อม Final,,da66_f2_grid_loop
+1 Dec,ซ้อม Final,,da66_f2_new_game_plus

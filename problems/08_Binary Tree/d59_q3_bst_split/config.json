@@ -1,0 +1,31 @@
+{
+  "id": 1476,
+  "name": "d59_q3_bst_split",
+  "title": "BST Split",
+  "tags": [
+    ".h",
+    "bst"
+  ],
+  "topic": "Binary Tree",
+  "schedule": [
+    {
+      "topic": "Binary Tree",
+      "date": "12 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/13.in",
+    "input/14.in",
+    "input/15.in",
+    "input/16.in",
+    "input/17.in",
+    "input/18.in",
+    "input/19.in",
+    "input/20.in",
+    "input/21.in",
+    "input/22.in",
+    "input/23.in",
+    "input/24.in"
+  ]
+}

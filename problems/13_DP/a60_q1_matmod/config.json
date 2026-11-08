@@ -1,0 +1,17 @@
+{
+  "id": 1497,
+  "name": "a60_q1_matmod",
+  "title": "Matrix Modulo",
+  "tags": [
+    "D&C"
+  ],
+  "topic": "DP",
+  "schedule": [
+    {
+      "topic": "DP",
+      "date": "24 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": []
+}

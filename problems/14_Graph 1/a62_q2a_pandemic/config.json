@@ -1,0 +1,26 @@
+{
+  "id": 1512,
+  "name": "a62_q2a_pandemic",
+  "title": "Pandemic",
+  "tags": [
+    "Graph",
+    "BFS"
+  ],
+  "topic": "Graph 1",
+  "schedule": [
+    {
+      "topic": "Graph 1",
+      "date": "25 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/03.in",
+    "input/04.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

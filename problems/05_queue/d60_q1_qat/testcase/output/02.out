@@ -1,0 +1,27 @@
+Queue size = 2 Data = 154 292 
+Data at 0 is 154
+Data at 1 is 348
+Data at 0 is 292
+Data at 1 is 433
+Data at 2 is 760
+Data at 2 is 103
+Queue size = 4 Data = 433 760 103 663 
+Data at 0 is 760
+Data at 2 is 663
+Data at 4 is 504
+Data at 4 is 504
+Queue size = 7 Data = 103 663 129 606 504 89 494 
+Data at 1 is 663
+Data at 8 is 485
+Queue size = 11 Data = 103 663 129 606 504 89 494 924 485 140 871 
+Data at 2 is 129
+Queue size = 12 Data = 103 663 129 606 504 89 494 924 485 140 871 327 
+Data at 6 is 494
+Data at 3 is 504
+Data at 9 is 327
+Data at 0 is 606
+Data at 0 is 504
+Data at 1 is 89
+Data at 6 is 871
+Queue size = 11 Data = 504 89 494 924 485 140 871 327 214 484 988 
+Exit

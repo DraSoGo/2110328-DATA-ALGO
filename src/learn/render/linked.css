@@ -1,0 +1,11 @@
+.viz-linked{min-width:640px}
+.viz-linked .edge{fill:none;stroke:var(--muted);stroke-width:1.5}
+.viz-linked .edge.prev{stroke:var(--faint)}
+.viz-linked .edge.is-new{stroke:var(--amber);stroke-width:2.5}
+.viz-linked .edge path{stroke:inherit;fill:none}
+.viz-linked marker path{fill:var(--muted);stroke:none}
+.viz-linked .lane-label{fill:var(--muted);font-size:11px}
+.viz-linked .item.is-header rect{stroke-dasharray:4 3;fill:var(--panel)}
+.viz-linked .item.is-header text{fill:var(--muted);font-size:11px}
+.viz-linked .item.is-lane rect{stroke:var(--cyan);stroke-dasharray:5 3}
+.viz-linked .item.is-removed rect{stroke:var(--red);fill:color-mix(in srgb,var(--red) 14%,var(--bg))}

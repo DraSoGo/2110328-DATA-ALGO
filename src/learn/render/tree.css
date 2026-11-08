@@ -1,0 +1,17 @@
+/* Tree and heap renderers. Heap array cells reuse the shared .item rules from learn.css. */
+.viz-tree,.viz-heap{min-width:520px}
+:is(.viz-tree,.viz-heap) .edge{stroke:var(--muted);stroke-width:1.5;fill:none}
+:is(.viz-tree,.viz-heap) .node circle{fill:var(--bg);stroke:var(--muted);stroke-width:1.5;transition:fill var(--viz-dur),stroke var(--viz-dur)}
+:is(.viz-tree,.viz-heap) .node text{fill:var(--text);font-size:14px}
+:is(.viz-tree,.viz-heap) .node.is-long>text:not(.badge){font-size:11px}
+:is(.viz-tree,.viz-heap) .node .badge{fill:var(--muted);font-size:10px;text-anchor:start}
+:is(.viz-tree,.viz-heap) .node.is-done circle{fill:color-mix(in srgb,var(--green) 18%,var(--bg))}
+:is(.viz-tree,.viz-heap) .node.is-active circle{fill:var(--cyan-soft);stroke:var(--cyan);stroke-width:2.5}
+:is(.viz-tree,.viz-heap) .node.is-moved circle{stroke:var(--green);stroke-width:2.5}
+:is(.viz-tree,.viz-heap) .node.is-compare circle{stroke:var(--amber);stroke-width:2.5}
+:is(.viz-tree,.viz-heap) .node.is-red circle{fill:#d64550;stroke:#ff8a93}
+:is(.viz-tree,.viz-heap) .node.is-black circle{fill:#111418;stroke:#8a96a3}
+:is(.viz-tree,.viz-heap) .node.is-red text,:is(.viz-tree,.viz-heap) .node.is-black text{fill:#ffffff}
+:is(.viz-tree,.viz-heap) .node.is-red .badge,:is(.viz-tree,.viz-heap) .node.is-black .badge{fill:var(--muted)}
+:is(.viz-tree,.viz-heap) .node.is-red.is-active circle,:is(.viz-tree,.viz-heap) .node.is-black.is-active circle{stroke:var(--cyan)}
+:is(.viz-tree,.viz-heap) .node.is-red.is-done circle,:is(.viz-tree,.viz-heap) .node.is-black.is-done circle{stroke:var(--green);stroke-width:2.5}

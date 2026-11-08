@@ -1,0 +1,25 @@
+{
+  "id": 1461,
+  "name": "d58_q2_custom",
+  "title": "Custom Order",
+  "tags": [
+    ".h",
+    "heap"
+  ],
+  "topic": "priority queue",
+  "schedule": [
+    {
+      "topic": "priority queue",
+      "date": "10 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "output/03.out",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out"
+  ]
+}

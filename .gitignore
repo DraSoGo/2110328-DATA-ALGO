@@ -1,0 +1,10 @@
+input.txt
+output.txt
+sys.txt
+dist/
+.vscode/
+.playwright-mcp/
+scripts/grader/organize_report*.json
+.claude/
+__pycache__/
+*.pyc

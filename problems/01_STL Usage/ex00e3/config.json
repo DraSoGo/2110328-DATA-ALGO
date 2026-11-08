@@ -1,0 +1,29 @@
+{
+  "id": 1441,
+  "name": "ex00e3",
+  "title": "Check Mapping",
+  "tags": [
+    "stl",
+    "set-map"
+  ],
+  "topic": "STL Usage",
+  "schedule": [
+    {
+      "topic": "STL Usage",
+      "date": "2 Nov",
+      "session": "การบ้าน"
+    }
+  ],
+  "testcase_truncated": [
+    "input/11.in",
+    "input/12.in",
+    "input/13.in",
+    "input/14.in",
+    "input/15.in",
+    "input/16.in",
+    "input/17.in",
+    "input/18.in",
+    "input/19.in",
+    "input/20.in"
+  ]
+}

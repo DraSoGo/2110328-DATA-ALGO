@@ -1,0 +1,24 @@
+{
+  "id": 1501,
+  "name": "ex01e3",
+  "title": "Binary Search 2",
+  "tags": [
+    "D&C"
+  ],
+  "topic": "D&C",
+  "schedule": [
+    {
+      "topic": "D&C",
+      "date": "23 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/03.in",
+    "output/03.out",
+    "input/04.in",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out"
+  ]
+}

@@ -1,0 +1,45 @@
+Stack size = 0 Data =
+Stack size = 1 Data = 618
+Stack size = 2 Data = 667 618
+Stack size = 1 Data = 667
+Stack size = 0 Data =
+Stack size = 1 Data = 64
+Stack size = 0 Data =
+Stack size = 1 Data = 119
+Stack size = 2 Data = 119 309
+Stack size = 1 Data = 119
+Stack size = 2 Data = 9 119
+Stack size = 1 Data = 9
+Stack size = 0 Data =
+Stack size = 1 Data = 338
+Stack size = 2 Data = 338 696
+Stack size = 3 Data = 494 338 696
+Stack size = 2 Data = 494 338
+Stack size = 3 Data = 494 371 338
+Stack size = 6 Data = 494 371 338 781 914 757
+Stack size = 7 Data = 494 371 338 781 914 757 791
+Stack size = 6 Data = 494 371 338 781 914 757
+Stack size = 5 Data = 494 371 338 781 914
+Stack size = 4 Data = 494 371 338 781
+Stack size = 3 Data = 494 371 338
+Stack size = 4 Data = 494 371 613 338
+Stack size = 5 Data = 494 371 613 478 338
+Stack size = 6 Data = 494 371 225 613 478 338
+Stack size = 7 Data = 494 371 947 225 613 478 338
+Stack size = 8 Data = 494 371 947 452 225 613 478 338
+Stack size = 8 Data = 494 371 947 452 225 613 478 338
+Stack size = 9 Data = 494 371 947 452 225 613 478 338 509
+Stack size = 10 Data = 494 371 947 452 225 613 478 338 509 535
+Stack size = 11 Data = 494 371 947 452 225 613 478 905 338 509 535
+Stack size = 10 Data = 494 371 947 452 225 613 478 905 338 509
+Stack size = 9 Data = 494 371 947 452 225 613 478 905 338
+Stack size = 12 Data = 494 371 947 452 917 225 613 478 905 338 766 712
+Stack size = 13 Data = 494 371 947 452 917 225 613 478 905 338 766 662 712
+Stack size = 12 Data = 494 371 947 452 917 225 613 478 905 338 766 662
+Stack size = 13 Data = 494 371 947 452 917 225 613 478 905 338 766 662 776
+Stack size = 14 Data = 494 371 947 452 917 225 613 478 872 905 338 766 662 776
+Stack size = 15 Data = 494 130 371 947 452 917 225 613 478 872 905 338 766 662 776
+Stack size = 14 Data = 494 130 371 947 452 917 225 613 478 872 905 338 766 662
+Stack size = 16 Data = 494 130 371 947 452 917 225 613 478 872 905 338 274 766 662 467
+Stack size = 17 Data = 290 494 130 371 947 452 917 225 613 478 872 905 338 274 766 662 467
+Stack

@@ -1,0 +1,18 @@
+{
+  "id": 1438,
+  "name": "ds00_reverse2",
+  "title": "Reverse Vector 2",
+  "tags": [
+    "vector",
+    "stl"
+  ],
+  "topic": "STL Usage",
+  "schedule": [
+    {
+      "topic": "STL Usage",
+      "date": "2 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": []
+}

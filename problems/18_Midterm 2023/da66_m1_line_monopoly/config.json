@@ -1,0 +1,36 @@
+{
+  "id": 1484,
+  "name": "da66_m1_line_monopoly",
+  "title": "Line Monopoly",
+  "tags": [],
+  "topic": "ซ้อม Midterm",
+  "schedule": [
+    {
+      "topic": "ซ้อม Midterm",
+      "date": "19 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/08.in",
+    "input/09.in",
+    "input/10.in",
+    "input/11.in",
+    "input/12.in",
+    "input/13.in",
+    "input/14.in",
+    "input/15.in",
+    "output/15.out",
+    "input/16.in",
+    "output/16.out",
+    "input/17.in",
+    "output/17.out",
+    "input/18.in",
+    "output/18.out",
+    "input/19.in",
+    "output/19.out",
+    "input/20.in",
+    "output/20.out"
+  ],
+  "source": "Midterm 2023 #3"
+}

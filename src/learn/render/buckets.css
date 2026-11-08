@@ -1,0 +1,6 @@
+.viz-buckets{min-width:560px}
+.viz-buckets .edge{fill:none;stroke:var(--muted);stroke-width:1.5}
+.viz-buckets marker path{fill:var(--muted);stroke:none}
+.viz-buckets .slot.is-active{fill:var(--cyan-soft);stroke:var(--cyan);stroke-width:2.5}
+.viz-buckets .lane-label{fill:var(--muted);font-size:11px}
+.viz-buckets .info{fill:var(--muted);font-size:12px;white-space:pre}

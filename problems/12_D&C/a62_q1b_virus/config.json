@@ -1,0 +1,22 @@
+{
+  "id": 1493,
+  "name": "a62_q1b_virus",
+  "title": "ตรวจจับไวรัส",
+  "tags": [
+    "D&C"
+  ],
+  "topic": "D&C",
+  "schedule": [
+    {
+      "topic": "D&C",
+      "date": "23 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}

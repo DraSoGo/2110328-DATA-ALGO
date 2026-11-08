@@ -1,0 +1,26 @@
+{
+  "id": 1517,
+  "name": "a60a_q3_xor_road",
+  "title": "XOR Road",
+  "tags": [
+    "Graph",
+    "MST"
+  ],
+  "topic": "MST",
+  "schedule": [
+    {
+      "topic": "MST",
+      "date": "26 Nov",
+      "session": "บ่าย"
+    }
+  ],
+  "testcase_truncated": [
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ]
+}
