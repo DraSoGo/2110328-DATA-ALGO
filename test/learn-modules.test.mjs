@@ -42,7 +42,7 @@ test('modules have unique ids per side, known renderers, and text fields', () =>
     seen.add(id);
     assert.match(module.id, /^[\w-]+$/);
     assert.ok(['data', 'algo'].includes(module.side), id);
-    assert.ok(RENDERERS[module.renderer], `${id} renderer`);
+    if (!module.widget) assert.ok(RENDERERS[module.renderer], `${id} renderer`);
     for (const key of ['title', 'summary', 'group']) assert.equal(typeof module[key], 'string', `${id} ${key}`);
   }
   for (const module of MODULES) assert.equal(findModule(module.side, module.id), module);
@@ -76,6 +76,7 @@ test('data ops: code mentions every param, defaults are valid, default run rende
 
 test('algo modules: defaults parse, every frame points at a code line and renders', () => {
   for (const module of modulesFor('algo')) {
+    if (module.widget) continue;
     assert.ok(module.code.length > 0);
     const input = {};
     for (const field of module.input.fields) {
@@ -102,7 +103,16 @@ test('every module states its Big O time and space', () => {
     for (const [name, op] of Object.entries(module.ops)) assert.match(op.time ?? '', BIG_O, `${module.id}.${name} time`);
   }
   for (const module of modulesFor('algo')) {
+    if (module.widget) continue;
     for (const key of ['best', 'average', 'worst']) assert.match(module.complexity?.time?.[key] ?? '', BIG_O, `${module.id} ${key} time`);
     assert.match(module.complexity?.space ?? '', BIG_O, `${module.id} space`);
+  }
+});
+
+test('widget modules expose a mount function and a list label', () => {
+  for (const module of MODULES.filter((item) => item.widget)) {
+    assert.equal(typeof module.widget.mount, 'function', module.id);
+    assert.equal(typeof module.widget.listLabel, 'string', module.id);
+    assert.ok(module.widget.listLabel.length > 0, module.id);
   }
 });

@@ -1,57 +1,75 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { record } from '../src/learn/engine/recorder.js';
-import complexity from '../src/learn/algo/complexity.js';
-import { RENDERERS } from '../src/learn/render/index.js';
+import complexity, {
+  bound, CLASSES, FUNCTIONS, estimate, feasibleRow, findN0, formatCount, formatSeconds, nFromSlider, sliderFromN,
+} from '../src/learn/algo/complexity.js';
 
-const run = (N) => record(complexity.run({ N }));
-const counts = (frame) => frame.state.bars.map((bar) => bar.to);
-const formulas = (n) => [1, Math.floor(Math.log2(n)), n, n * Math.floor(Math.log2(n)), n * n, 2 ** n];
+const byId = (id) => CLASSES.find((item) => item.id === id);
 
-test('the final bars equal the closed-form counts for every N', () => {
-  for (let N = 1; N <= 12; N += 1) {
-    assert.deepEqual(counts(run(N).at(-1)), formulas(N), `N=${N}`);
-  }
+test('the module is a widget with a mount function and a list label', () => {
+  assert.equal(complexity.id, 'complexity');
+  assert.equal(complexity.side, 'algo');
+  assert.equal(typeof complexity.widget.mount, 'function');
+  assert.match(complexity.widget.listLabel, /O\(1\)/);
 });
 
-test('steps advance n from 1 to N, six programs per n', () => {
-  const frames = run(5);
-  const ns = frames.filter((frame) => frame.line === 1 && !frame.msg.includes('not')).map((frame) => frame.vars.n);
-  assert.deepEqual(ns, [1, 2, 3, 4, 5]);
-  const atN3 = frames.filter((frame) => frame.vars.n === 3 && frame.hl.active);
-  assert.equal(atN3.length, 6);
-  assert.deepEqual(counts(atN3.at(-1)), formulas(3));
+test('the log-scale slider maps 0..1800 to n = 1..10^18 and back', () => {
+  assert.equal(nFromSlider(0), 1);
+  assert.equal(nFromSlider(300), 1000);
+  assert.equal(nFromSlider(1800), 1e18);
+  assert.equal(sliderFromN(1e6), 600);
+  assert.equal(sliderFromN(7500), Math.round(Math.log10(7500) * 100));
 });
 
-test('growth order at n = 12: 1 < log n < n < n log n < n² < 2^n', () => {
-  const final = counts(run(12).at(-1));
-  assert.deepEqual(final, [1, 3, 12, 36, 144, 4096]);
-  for (let k = 1; k < final.length; k += 1) assert.equal(final[k] > final[k - 1], true);
-  assert.deepEqual(run(12).at(-1).hl.done, [0, 1, 2, 3, 4, 5]);
+test('estimate counts operations exactly while they fit in the time limit', () => {
+  assert.deepEqual(estimate(byId('n2'), 1000), { status: 'ok', ops: 1e6, seconds: 0.01 });
+  assert.equal(estimate(byId('n'), 1e8).status, 'ok');
+  assert.equal(estimate(byId('nlogn'), 1024).ops, 1024 * 10);
+  assert.equal(estimate(byId('log'), 1).ops, 1);
+  assert.equal(estimate(byId('const'), 1e18).ops, 1);
 });
 
-test('the axis is fixed from the input N and bars never exceed it', () => {
-  const frames = run(8);
-  assert.equal(new Set(frames.map((frame) => frame.state.max)).size, 1);
-  assert.equal(frames[0].state.max, 256);
-  for (const frame of frames) assert.equal(Math.max(...counts(frame)) <= frames[0].state.max, true);
+test('estimate flags borderline cases and stops computing far past the limit', () => {
+  assert.equal(estimate(byId('n2'), 2e4).status, 'borderline');
+  const tle = estimate(byId('n3'), 1e5);
+  assert.equal(tle.status, 'tle');
+  assert.equal(tle.ops, null);
+  assert.equal(estimate(byId('fact'), 25).status, 'tle');
+  assert.equal(estimate(byId('exp'), 1e18).status, 'tle');
+  assert.equal(estimate(byId('fact'), 10).status, 'ok');
 });
 
-test('bar text is the exact count and the viewBox never changes during a run', () => {
-  const frames = run(6);
-  const boxes = new Set(frames.map((frame) => RENDERERS.timeline(frame.state, frame.hl).match(/viewBox="([^"]+)"/)[1]));
-  assert.equal(boxes.size, 1);
-  assert.deepEqual(frames.at(-1).state.bars.map((bar) => bar.text), formulas(6).map(String));
+test('feasibleRow follows the n-limit table', () => {
+  assert.match(feasibleRow(10).classes, /n!/);
+  assert.match(feasibleRow(11).classes, /2\^n/);
+  assert.match(feasibleRow(400).classes, /n³/);
+  assert.match(feasibleRow(7500).classes, /n²/);
+  assert.match(feasibleRow(5e5).classes, /n log n/);
+  assert.match(feasibleRow(1e17).classes, /log n/);
 });
 
-test('N = 12 stays far under the frame limit and ends on the closing line', () => {
-  const frames = run(12);
-  assert.equal(frames.length < 200, true);
-  assert.equal(frames.at(-1).line, complexity.code.length - 1);
+test('formatting keeps numbers readable', () => {
+  assert.equal(formatCount(999), '999');
+  assert.equal(formatCount(12345), '12,345');
+  assert.equal(formatCount(1e12), '1.0 × 10¹²');
+  assert.equal(formatSeconds(2e-9), '2 ns');
+  assert.equal(formatSeconds(0.5), '500 ms');
+  assert.equal(formatSeconds(90), '1.5 min');
 });
 
-test('input field limits N to 12', () => {
-  const field = complexity.input.fields[0];
-  assert.equal(field.max, 12);
-  assert.equal(field.min, 1);
+test('bound compares growth rates for O, Omega, and Theta', () => {
+  const f = (id) => FUNCTIONS.find((item) => item.id === id);
+  assert.deepEqual(bound(f('lin10'), f('n12')), { O: true, Omega: false, Theta: false });
+  assert.deepEqual(bound(f('lin10'), f('lin')), { O: true, Omega: true, Theta: true });
+  assert.deepEqual(bound(f('quad2'), f('nlogn')), { O: false, Omega: true, Theta: false });
+  assert.deepEqual(bound(f('exp'), f('cube')), { O: false, Omega: true, Theta: false });
+});
+
+test('findN0 returns the first n from which the inequality holds to the end of the range', () => {
+  const f = FUNCTIONS.find((item) => item.id === 'lin10');
+  const g = FUNCTIONS.find((item) => item.id === 'n12');
+  const n0 = findN0((n) => f.value(n) <= 2 * g.value(n), 60);
+  assert.ok(n0 > 3 && n0 < 5, String(n0));
+  assert.equal(findN0((n) => n * n <= n, 60), null);
+  assert.equal(findN0(() => true, 60), 1);
 });

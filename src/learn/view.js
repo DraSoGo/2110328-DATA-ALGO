@@ -1,5 +1,6 @@
 import { highlightCpp } from '../lib/cpp-highlight.js';
 import { escapeHtml } from '../lib/html.js';
+import { moduleSummary, t } from '../lib/i18n.js';
 import { fieldDefaultRaw, graphEdgesText, parseField, parseInteger } from './engine/input.js';
 import { patchSvg } from './engine/morph.js';
 import { createPlayer, SPEEDS } from './engine/player.js';
@@ -23,15 +24,15 @@ function stageMessage(title, text) {
 }
 
 function playerMarkup() {
-  return `<div class="player" role="group" aria-label="Step controls">
-    <button type="button" data-player="first" aria-label="First step">⏮</button>
-    <button type="button" data-player="prev" aria-label="Previous step">‹</button>
-    <button type="button" data-player="toggle" class="player-play" aria-label="Play">▶</button>
-    <button type="button" data-player="next" aria-label="Next step">›</button>
-    <button type="button" data-player="last" aria-label="Last step">⏭</button>
-    <input type="range" class="player-range" min="0" max="0" value="0" aria-label="Step">
+  return `<div class="player" role="group" aria-label="${escapeHtml(t('player.controls'))}">
+    <button type="button" data-player="first" aria-label="${escapeHtml(t('player.first'))}">⏮</button>
+    <button type="button" data-player="prev" aria-label="${escapeHtml(t('player.prev'))}">‹</button>
+    <button type="button" data-player="toggle" class="player-play" aria-label="${escapeHtml(t('player.play'))}">▶</button>
+    <button type="button" data-player="next" aria-label="${escapeHtml(t('player.next'))}">›</button>
+    <button type="button" data-player="last" aria-label="${escapeHtml(t('player.last'))}">⏭</button>
+    <input type="range" class="player-range" min="0" max="0" value="0" aria-label="${escapeHtml(t('player.step'))}">
     <span class="player-count">1 / 1</span>
-    <label class="player-speed">Speed <select>${SPEEDS.map((speed) => `<option value="${speed}"${speed === 1 ? ' selected' : ''}>${speed}×</option>`).join('')}</select></label>
+    <label class="player-speed">${escapeHtml(t('learn.speed'))} <select>${SPEEDS.map((speed) => `<option value="${speed}"${speed === 1 ? ' selected' : ''}>${speed}×</option>`).join('')}</select></label>
   </div>`;
 }
 
@@ -50,7 +51,7 @@ function opLineMarkup(op, values) {
 function slidesMarkup(module) {
   const slides = slidesFor(module);
   if (!slides.length) return '';
-  return `<p class="slide-links"><span>Course slides</span>${slides.map((slide) => `<a href="${escapeHtml(new URL(`../../${slidePath(slide)}`, import.meta.url).href)}" target="_blank" rel="noopener">${escapeHtml(slide.title)} <small>${escapeHtml(slide.file)}</small></a>`).join('')}</p>`;
+  return `<p class="slide-links"><span>${escapeHtml(t('learn.slides'))}</span>${slides.map((slide) => `<a href="${escapeHtml(new URL(`../../${slidePath(slide)}`, import.meta.url).href)}" target="_blank" rel="noopener">${escapeHtml(slide.title)} <small>${escapeHtml(slide.file)}</small></a>`).join('')}</p>`;
 }
 
 function complexityRows(module) {
@@ -63,29 +64,30 @@ function complexityRows(module) {
 
 // One-line Big O summary for the module list.
 export function complexitySummary(module) {
+  if (module.widget) return module.widget.listLabel;
   if (module.side === 'data') return `space ${module.complexity.space}`;
   return `${module.complexity.time.worst} time · ${module.complexity.space} space`;
 }
 
 function complexityMarkup(module) {
   const rows = complexityRows(module).map(([label, value]) => `<div class="${label === 'space' ? 'is-space' : ''}"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('');
-  return `<section class="complexity" aria-label="Big O complexity"><p class="complexity-title">Big O · ${module.side === 'data' ? 'time per operation' : 'time'} and space</p><dl>${rows}</dl>${module.complexity.note ? `<p class="complexity-note">${escapeHtml(module.complexity.note)}</p>` : ''}</section>`;
+  return `<section class="complexity" aria-label="Big O complexity"><p class="complexity-title">${escapeHtml(t(module.side === 'data' ? 'learn.bigO.data' : 'learn.bigO.algo'))}</p><dl>${rows}</dl>${module.complexity.note ? `<p class="complexity-note">${escapeHtml(module.complexity.note)}</p>` : ''}</section>`;
 }
 
 function dataStageMarkup(module) {
   const ops = Object.keys(module.ops);
-  return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(module.summary)}</p>${slidesMarkup(module)}</header>
+  return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(moduleSummary(module))}</p>${slidesMarkup(module)}</header>
     ${complexityMarkup(module)}
     <div class="op-bar" role="toolbar" aria-label="Operations">${ops.map((name, index) => `<button type="button" data-op="${escapeHtml(name)}" aria-pressed="${index === 0}">${escapeHtml(name)}<small>${escapeHtml(module.ops[name].time)}</small></button>`).join('')}</div>
     <div class="code-panel data-code">
-      <pre class="code-block"><code class="language-cpp"><span class="code-line muted">${highlightCpp(module.declare)}</span><span class="code-line op-line" data-line="0"></span></code></pre>
-      <div class="op-actions"><button type="button" class="run-button" data-action="run">Run</button><button type="button" data-action="reset">Reset</button></div>
+      <pre class="code-block" translate="no"><code class="language-cpp"><span class="code-line muted">${highlightCpp(module.declare)}</span><span class="code-line op-line" data-line="0"></span></code></pre>
+      <div class="op-actions"><button type="button" class="run-button" data-action="run">${escapeHtml(t('learn.run'))}</button><button type="button" data-action="reset">${escapeHtml(t('learn.reset'))}</button></div>
       <p class="op-error" role="alert"></p>
     </div>
     <div class="viz-host"></div>
     <p class="step-msg" aria-live="polite"></p>
     ${playerMarkup()}
-    <p class="history"><span>history</span><code class="history-list"></code></p>`;
+    <p class="history"><span>${escapeHtml(t('learn.history'))}</span><code class="history-list" translate="no"></code></p>`;
 }
 
 function nodeOptions(nodes, selected) {
@@ -98,8 +100,8 @@ function fieldMarkup(module, field) {
   if (field.kind === 'graph') {
     const raw = fieldDefaultRaw(field);
     const options = field.presets.map((preset) => `<option value="${escapeHtml(preset.id)}"${preset.id === raw.preset ? ' selected' : ''}>${escapeHtml(preset.name)}</option>`).join('');
-    const hint = field.weighted === false ? 'one edge per line: u v' : 'one edge per line: u v weight';
-    return `<label class="graph-field">${label}<select data-preset-of="${name}" aria-label="${escapeHtml(field.label)} preset">${options}</select><textarea name="${name}" rows="6" spellcheck="false" aria-label="${escapeHtml(field.label)} edges">${escapeHtml(raw.text)}</textarea><small>${hint}</small></label>`;
+    const hint = t(field.weighted === false ? 'learn.edgeHintUnweighted' : 'learn.edgeHint');
+    return `<label class="graph-field">${label}<select data-preset-of="${name}" aria-label="${escapeHtml(field.label)} preset">${options}</select><textarea name="${name}" rows="6" spellcheck="false" aria-label="${escapeHtml(field.label)} edges">${escapeHtml(raw.text)}</textarea><small>${escapeHtml(hint)}</small></label>`;
   }
   if (field.kind === 'node') {
     const graph = module.input.fields.find((item) => item.name === field.graph);
@@ -109,16 +111,21 @@ function fieldMarkup(module, field) {
   return `<label>${label}<input name="${name}" value="${escapeHtml(fieldDefaultRaw(field))}" autocomplete="off" spellcheck="false"></label>`;
 }
 
+function widgetStageMarkup(module) {
+  return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(moduleSummary(module))}</p>${slidesMarkup(module)}</header>
+    <div class="widget-host"></div>`;
+}
+
 function algoStageMarkup(module) {
   const fields = module.input.fields.map((field) => fieldMarkup(module, field)).join('');
-  return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(module.summary)}</p>${slidesMarkup(module)}</header>
+  return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(moduleSummary(module))}</p>${slidesMarkup(module)}</header>
     ${complexityMarkup(module)}
-    <form class="algo-input" novalidate>${fields}<button type="submit" class="run-button">Run</button><p class="op-error" role="alert"></p></form>
+    <form class="algo-input" novalidate>${fields}<button type="submit" class="run-button">${escapeHtml(t('learn.run'))}</button><p class="op-error" role="alert"></p></form>
     <div class="viz-host"></div>
     <p class="step-msg" aria-live="polite"></p>
     <div class="algo-detail">
-      <pre class="code-block algo-code"><code class="language-cpp">${module.code.map((line, index) => `<span class="code-line" data-line="${index}"><i>${index + 1}</i>${highlightCpp(line)}</span>`).join('')}</code></pre>
-      <aside class="vars-box" aria-label="Variables"><p class="vars-title">Variables</p><dl class="vars-panel"></dl></aside>
+      <pre class="code-block algo-code" translate="no"><code class="language-cpp">${module.code.map((line, index) => `<span class="code-line" data-line="${index}"><i>${index + 1}</i>${highlightCpp(line)}</span>`).join('')}</code></pre>
+      <aside class="vars-box" aria-label="${escapeHtml(t('learn.variables'))}"><p class="vars-title">${escapeHtml(t('learn.variables'))}</p><dl class="vars-panel"></dl></aside>
     </div>
     ${playerMarkup()}`;
 }
@@ -132,12 +139,13 @@ export function learnPageMarkup(route) {
     .map((item) => `<a class="module-link${item === module ? ' active' : ''}" href="#/learn/${route.side}/${escapeHtml(item.id)}"><span>${escapeHtml(item.title)}</span><small>${escapeHtml(complexitySummary(item))}</small></a>`)
     .join('')}`).join('');
   let stage;
-  if (!route.module) stage = stageMessage('Pick a module', `Choose ${route.side === 'data' ? 'a data structure' : 'an algorithm'} from the list.`);
-  else if (!module) stage = stageMessage('Module not found', 'This module does not exist yet. Pick one from the list.');
+  if (!route.module) stage = stageMessage(t('learn.pick.title'), t(route.side === 'data' ? 'learn.pick.data' : 'learn.pick.algo'));
+  else if (!module) stage = stageMessage(t('learn.missing.title'), t('learn.missing.text'));
+  else if (module.widget) stage = widgetStageMarkup(module);
   else stage = module.side === 'data' ? dataStageMarkup(module) : algoStageMarkup(module);
   return `<div class="learn-view view-enter">
     <div class="terminal-label"><span>~/cedt/data_algo/learn/${route.side}</span><span>${escapeHtml(module ? module.id : route.side)}.exe</span></div>
-    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#/learn">LEARN</a><span>/</span><a href="#/learn/${route.side}">${route.side.toUpperCase()}</a>${module ? `<span>/</span><strong>${escapeHtml(module.title.toUpperCase())}</strong>` : ''}</nav>
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#/learn">${escapeHtml(t('crumb.learn'))}</a><span>/</span><a href="#/learn/${route.side}">${escapeHtml(t(route.side === 'data' ? 'nav.data' : 'nav.algo').toUpperCase())}</a>${module ? `<span>/</span><strong>${escapeHtml(module.title.toUpperCase())}</strong>` : ''}</nav>
     <div class="learn-layout"><nav class="module-list" aria-label="${route.side} modules">${list}</nav><section class="module-stage">${stage}</section></div>
   </div>`;
 }
@@ -223,11 +231,11 @@ function mountData(module, root, ui, load) {
     history.length = 0;
     historyList.textContent = '';
     ui.error.textContent = '';
-    idle('Reset to the preset.');
+    idle(t('learn.resetDone'));
   });
 
   showOp();
-  idle('Pick an operation, change the numbers, then press Run.');
+  idle(t('learn.idle'));
 }
 
 function mountAlgo(module, root, ui, load) {
@@ -275,6 +283,13 @@ export function mountLearn(route, root) {
   unmountLearn();
   const module = route.module ? findModule(route.side, route.module) : null;
   if (!module) return;
+  if (module.widget) {
+    const current = { player: null, cleanup: [] };
+    session = current;
+    const cleanup = module.widget.mount(root.querySelector('.widget-host'));
+    if (typeof cleanup === 'function') current.cleanup.push(cleanup);
+    return;
+  }
   const current = { player: null, cleanup: [] };
   session = current;
   const render = RENDERERS[module.renderer];
@@ -304,7 +319,7 @@ export function mountLearn(route, root) {
     ui.range.value = String(index);
     ui.count.textContent = `${index + 1} / ${total}`;
     ui.play.textContent = playing ? '❚❚' : '▶';
-    ui.play.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    ui.play.setAttribute('aria-label', t(playing ? 'player.pause' : 'player.play'));
     ui.lines.forEach((line) => line.classList.toggle('is-current', Number(line.dataset.line) === frame.line));
     if (ui.vars) ui.vars.innerHTML = varsMarkup(frame.vars);
   };
