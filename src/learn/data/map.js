@@ -1,4 +1,4 @@
-import { assign, buildTree, contains, erase, find, insert, LIMIT, nodeAt } from './rbtree.js';
+import { assign, buildTree, clear, contains, count, descend, erase, find, insert, LIMIT, lowerBound, nodeAt, setPointers, upperBound } from './rbtree.js';
 
 export const PRESET = [[10, 1], [20, 4], [30, 9], [40, 16], [50, 25], [60, 36], [70, 49]];
 const keyParam = { name: 'k', min: 0, max: 99, default: 80 };
@@ -65,6 +65,60 @@ export default {
       *run(state, { k }) {
         const key = yield* find(state, k);
         if (key !== null) yield { line: 0, msg: `it->first is ${k} and it->second is ${nodeAt(state, key).v}`, state, hl: { done: [key] } };
+      },
+    },
+    count: {
+      params: [{ ...keyParam, default: 40 }],
+      time: 'O(log n)',
+      code: 'm.count({k});',
+      check: () => null,
+      *run(state, { k }) {
+        yield* count(state, k);
+      },
+    },
+    lower_bound: {
+      params: [{ ...keyParam, default: 45 }],
+      time: 'O(log n)',
+      code: 'm.lower_bound({k});',
+      check: () => null,
+      *run(state, { k }) {
+        const key = yield* lowerBound(state, k);
+        if (key !== null) yield { line: 0, msg: `The iterator points at ${nodeAt(state, key).k}:${nodeAt(state, key).v}, the first pair whose key is >= ${k}`, state, hl: { done: [key] } };
+      },
+    },
+    upper_bound: {
+      params: [{ ...keyParam, default: 50 }],
+      time: 'O(log n)',
+      code: 'm.upper_bound({k});',
+      check: () => null,
+      *run(state, { k }) {
+        const key = yield* upperBound(state, k);
+        if (key !== null) yield { line: 0, msg: `The iterator points at ${nodeAt(state, key).k}:${nodeAt(state, key).v}, the first pair whose key is > ${k}`, state, hl: { done: [key] } };
+      },
+    },
+    at: {
+      params: [{ ...keyParam, default: 30 }],
+      time: 'O(log n)',
+      code: 'm.at({k});',
+      check: () => null,
+      *run(state, { k }) {
+        const { cur, found } = yield* descend(state, k, 'find', ['cur', 'p']);
+        if (found) {
+          setPointers(state, { cur });
+          yield { line: 0, msg: `at(${k}) returns a reference to the value ${nodeAt(state, cur).v}; unlike m[${k}] it never inserts`, state, hl: { done: [cur] } };
+          return;
+        }
+        setPointers(state, {});
+        yield { line: 0, msg: `Reached an empty link: ${k} is missing, so std::map::at throws std::out_of_range and the map is unchanged (m[${k}] would have inserted it)`, state, hl: {} };
+      },
+    },
+    clear: {
+      params: [],
+      time: 'O(n)',
+      code: 'm.clear();',
+      check: () => null,
+      *run(state) {
+        yield* clear(state);
       },
     },
   },

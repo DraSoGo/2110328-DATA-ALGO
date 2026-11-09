@@ -153,3 +153,80 @@ test('random insert/erase sequences match a Set and stay a valid BST', () => {
     assert.deepEqual(inorder(state), [...ref].sort((a, b) => a - b), `step ${step} ${op} ${x}`);
   }
 });
+
+const ptrNames = ['cur', 'parent', 'succ'];
+const assertFrames = (frames) => {
+  assert.ok(frames.length >= 1 && frames.length < 2000);
+  for (const f of frames) {
+    assert.ok(f.msg);
+    assert.equal(f.line, 0);
+    assert.equal(new Set(f.state.nodes.map((n) => n.key)).size, f.state.nodes.length);
+    assert.deepEqual(Object.keys(f.state.pointers), ptrNames);
+  }
+};
+const doneLabel = (out) => {
+  const done = out.frames.at(-1).hl.done;
+  return done?.length ? byKey(out.state).get(done[0]).label : null;
+};
+
+test('begin, find_max, bounds and successor match a sorted array', () => {
+  const next = rng(11);
+  for (let round = 0; round < 40; round += 1) {
+    const vals = [...new Set(Array.from({ length: 1 + Math.floor(next() * 10) }, () => Math.floor(next() * 40) - 20))];
+    const s = vals.reduce((st, x) => (bst.ops.insert.check(st, { x }) ? st : runOp('insert', st, { x }).state), build([]));
+    const sorted = inorder(s);
+    const min = runOp('begin', s, {});
+    const max = runOp('find_max', s, {});
+    assertFrames(min.frames);
+    assertFrames(max.frames);
+    assert.equal(doneLabel(min), sorted[0]);
+    assert.equal(doneLabel(max), sorted.at(-1));
+    for (let x = -22; x <= 22; x += 1) {
+      const lb = runOp('lower_bound', s, { x });
+      const ub = runOp('upper_bound', s, { x });
+      assert.equal(doneLabel(lb), sorted.find((v) => v >= x) ?? null, `lower_bound ${x}`);
+      assert.equal(doneLabel(ub), sorted.find((v) => v > x) ?? null, `upper_bound ${x}`);
+      assert.deepEqual(lb.state.nodes, s.nodes);
+      const su = runOp('successor', s, { x });
+      assertFrames(su.frames);
+      assert.equal(doneLabel(su), sorted.includes(x) ? (sorted.find((v) => v > x) ?? null) : null, `successor ${x}`);
+    }
+  }
+});
+
+test('successor shows both cases and the end()', () => {
+  const right = runOp('successor', bst.preset(), { x: 30 }); // no right child: climb to 40
+  assert.match(right.frames.map((f) => f.msg).join('\n'), /right child of 20/);
+  assert.equal(doneLabel(right), 40);
+  const down = runOp('successor', bst.preset(), { x: 40 });
+  assert.match(down.frames.map((f) => f.msg).join('\n'), /minimum of the right subtree/);
+  assert.equal(doneLabel(down), 50);
+  assert.match(runOp('successor', bst.preset(), { x: 70 }).frames.at(-1).msg, /end\(\)/);
+  assert.match(runOp('successor', bst.preset(), { x: 31 }).frames.at(-1).msg, /not in the tree/);
+});
+
+test('empty tree: begin, find_max, bounds, clear', () => {
+  const e = build([]);
+  for (const name of ['begin', 'find_max', 'clear']) assert.match(runOp(name, e, {}).frames.at(-1).msg, /empty/);
+  assert.match(runOp('lower_bound', e, { x: 1 }).frames.at(-1).msg, /end\(\)/);
+});
+
+test('clear deletes in post-order and leaves a valid empty tree that accepts inserts', () => {
+  const out = runOp('clear', bst.preset(), {});
+  assertFrames(out.frames);
+  assert.equal(out.state.root, null);
+  assert.deepEqual(out.state.nodes, []);
+  assert.equal(out.frames.length, 7 * 2 + 1);
+  assert.deepEqual(out.frames.filter((f) => /^Visit/.test(f.msg)).map((f) => f.msg.match(/Visit (\d+)/)[1]), ['10', '30', '20', '50', '70', '60', '40']);
+  assertValid(out.state);
+  assert.deepEqual(inorder(runOp('insert', out.state, { x: 5 }).state), [5]);
+});
+
+test('new ops: defaults have Big O and code placeholders', () => {
+  for (const name of ['begin', 'find_max', 'lower_bound', 'upper_bound', 'successor', 'clear']) {
+    assert.match(bst.ops[name].time, /^O\(/);
+    const args = Object.fromEntries(bst.ops[name].params.map((p) => [p.name, p.default]));
+    assert.equal(bst.ops[name].check(bst.preset(), args), null);
+    assertFrames(runOp(name, bst.preset(), args).frames);
+  }
+});

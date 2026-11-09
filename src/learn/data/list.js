@@ -89,6 +89,93 @@ function* unlink(state, k) {
   yield { line: 0, msg: `delete x; mSize--: the list holds ${plural(state.nodes.length)}${state.nodes.length ? ' and the nodes after x close up' : ' and the header points at itself again'}`, state, hl: { moved: state.nodes.slice(k).map((node) => node.key) } };
 }
 
+const swapNext = (state, node, label) => {
+  [node.next, node.prev] = [node.prev, node.next];
+  return `swap(${label}->next, ${label}->prev): next now points at ${describe(state, node.next)}, prev at ${describe(state, node.prev)}`;
+};
+
+// Course clear(): while (mSize > 0) erase(begin());
+function* eraseAllFront(state) {
+  while (state.nodes.length) {
+    yield* begin(state, 'begin()');
+    yield* unlink(state, 0);
+  }
+}
+
+// remove(x): one pass with an iterator; erase(it) at every match, ++it otherwise.
+function* removeAll(state, x) {
+  let k = 0;
+  let removed = 0;
+  yield* begin(state, 'l.begin()');
+  while (k < state.nodes.length) {
+    const node = state.nodes[k];
+    state.pointers.it = node.key;
+    const same = node.value === x;
+    yield { line: 0, msg: `*it == ${x}? ${node.value} ${same ? '==' : '!='} ${x}: ${same ? 'erase this node' : 'keep it and move on'}`, state, hl: { compare: [node.key] } };
+    if (same) {
+      yield* unlink(state, k);
+      removed += 1;
+      const next = target(state, k);
+      state.pointers.it = next.key;
+      yield { line: 0, msg: `it = erase(it) returns the node after x: ${next === state.header ? 'the header, which is end()' : `${next.value}`}`, state, hl: { active: [next.key] } };
+    } else {
+      k += 1;
+      const next = target(state, k);
+      state.pointers.it = next.key;
+      yield { line: 0, msg: `++it follows it.ptr->next: it is at ${next === state.header ? 'the header, which is end()' : `${next.value}`}`, state, hl: { compare: [next.key] } };
+    }
+  }
+  state.pointers.it = null;
+  yield { line: 0, msg: removed ? `it == end(): erased ${plural(removed)} equal to ${x}; mSize = ${state.nodes.length}` : `it == end(): no node held ${x}, the list is unchanged`, state, hl: {} };
+}
+
+// Course shift(k): rotate by moving only the header (no insert/erase calls).
+function* shift(state, k) {
+  const n = state.nodes.length;
+  const r = ((k % n) + n) % n;
+  yield { line: 0, msg: `r = ((k % size) + size) % size = ((${k} % ${n}) + ${n}) % ${n} = ${r}: the new first element is the one at position ${r}${r === 0 ? ', so the list is already in place' : ''}`, state, hl: {} };
+  if (r === 0) return;
+  yield* walk(state, r);
+  const first = state.nodes[0];
+  const last = state.nodes[n - 1];
+  const head = state.nodes[r];
+  const tail = state.nodes[r - 1];
+  const h = state.header;
+  last.next = first.key;
+  yield { line: 0, msg: `Take the header out of the circle: last->next = first, so ${last.value} points forward at ${first.value}`, state, hl: { active: [last.key, first.key], edge: [`${last.key}.next`] } };
+  first.prev = last.key;
+  yield { line: 0, msg: `first->prev = last: ${first.value} points back at ${last.value}; the nodes now form a circle without the header`, state, hl: { active: [first.key, last.key], edge: [`${first.key}.prev`] } };
+  h.next = head.key;
+  yield { line: 0, msg: `mHeader->next = it.ptr: the header's next is the new first element, ${head.value}`, state, hl: { active: [h.key, head.key], edge: [`${h.key}.next`] } };
+  h.prev = tail.key;
+  yield { line: 0, msg: `mHeader->prev = it.ptr->prev: the header's prev is the new last element, ${tail.value}`, state, hl: { active: [h.key, tail.key], edge: [`${h.key}.prev`] } };
+  tail.next = h.key;
+  yield { line: 0, msg: `it.ptr->prev->next = mHeader: ${tail.value} points forward at the header`, state, hl: { active: [tail.key, h.key], edge: [`${tail.key}.next`] } };
+  head.prev = h.key;
+  yield { line: 0, msg: `it.ptr->prev = mHeader: ${head.value} points back at the header, the circle is closed again`, state, hl: { active: [head.key, h.key], edge: [`${head.key}.prev`] } };
+  state.nodes = [...state.nodes.slice(r), ...state.nodes.slice(0, r)];
+  state.pointers.it = null;
+  yield { line: 0, msg: `Done: mSize is still ${n} and no node was created or deleted. Reading from the header, the list is now ${state.nodes.map((node) => node.value).join(', ')}`, state, hl: { moved: state.nodes.map((node) => node.key) } };
+}
+
+// reverse(): swap next and prev in every node, header included.
+function* reverse(state) {
+  const h = state.header;
+  yield { line: 0, msg: 'Walk the circle once, starting at the header, and swap next with prev in every node (the header too)', state, hl: { active: [h.key] } };
+  const order = [h, ...state.nodes];
+  for (const node of order) {
+    state.pointers.it = node.key;
+    const label = node === h ? 'mHeader' : `${node.value}`;
+    yield { line: 0, msg: `p = ${label === 'mHeader' ? 'mHeader' : `node ${label}`}: before the swap next is ${describe(state, node.next)} and prev is ${describe(state, node.prev)}`, state, hl: { compare: [node.key] } };
+    const msg = swapNext(state, node, node === h ? 'mHeader' : 'p');
+    yield { line: 0, msg, state, hl: { active: [node.key], edge: [`${node.key}.next`, `${node.key}.prev`] } };
+  }
+  state.pointers.it = null;
+  yield { line: 0, msg: 'Every arrow is flipped. The old last node is now the first, and mSize did not change', state, hl: {} };
+  state.nodes.reverse();
+  yield { line: 0, msg: `Reading from the header along next, the list is ${state.nodes.map((node) => node.value).join(', ') || 'empty'}`, state, hl: { moved: state.nodes.map((node) => node.key) } };
+}
+
 export default {
   id: 'list',
   side: 'data',
@@ -179,6 +266,48 @@ export default {
       *run(state, { pos }) {
         yield* walk(state, pos);
         yield* unlink(state, pos);
+      },
+    },
+    clear: {
+      params: [],
+      time: 'O(n)',
+      code: 'l.clear();  // while (mSize > 0) erase(begin());',
+      check: () => null,
+      *run(state) {
+        if (state.nodes.length === 0) {
+          yield { line: 0, msg: 'mSize == 0: the loop body never runs, the header already points at itself', state, hl: { active: [state.header.key] } };
+          return;
+        }
+        yield { line: 0, msg: `mSize = ${state.nodes.length} > 0: erase(begin()) once per element, front first`, state, hl: { compare: state.nodes.map((node) => node.key) } };
+        yield* eraseAllFront(state);
+        yield { line: 0, msg: 'mSize == 0: the loop ends. mHeader->next and mHeader->prev both point at the header again', state, hl: { done: [state.header.key] } };
+      },
+    },
+    reverse: {
+      params: [],
+      time: 'O(n)',
+      code: 'l.reverse();  // swap(p->next, p->prev) for every node, header included',
+      check: () => null,
+      *run(state) {
+        yield* reverse(state);
+      },
+    },
+    remove: {
+      params: [{ name: 'x', min: -99, max: 99, default: 20 }],
+      time: 'O(n)',
+      code: 'l.remove({x});  // erase every node equal to x',
+      check: () => null,
+      *run(state, { x }) {
+        yield* removeAll(state, x);
+      },
+    },
+    shift: {
+      params: [{ name: 'k', min: -20, max: 20, default: 1 }],
+      time: 'O(n)',
+      code: 'l.shift({k});  // circular shift: left for k > 0, right for k < 0, only mHeader moves',
+      check: (state) => (state.nodes.length === 0 ? 'shift needs size > 0: k % size with size 0 is undefined behaviour' : null),
+      *run(state, { k }) {
+        yield* shift(state, k);
       },
     },
   },

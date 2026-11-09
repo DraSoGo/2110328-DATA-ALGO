@@ -1,4 +1,4 @@
-import { buildTree, contains, erase, find, insert, LIMIT, lowerBound } from './rbtree.js';
+import { buildTree, clear, contains, count, erase, find, findMin, insert, LIMIT, lowerBound, upperBound } from './rbtree.js';
 
 export const PRESET = [10, 20, 30, 40, 50, 60, 70];
 const valueParam = { name: 'x', min: -99, max: 99, default: 80 };
@@ -55,6 +55,42 @@ export default {
       check: () => null,
       *run(state, { x }) {
         yield* lowerBound(state, x);
+      },
+    },
+    upper_bound: {
+      params: [{ ...valueParam, default: 50 }],
+      time: 'O(log n)',
+      code: 's.upper_bound({x});',
+      check: () => null,
+      *run(state, { x }) {
+        yield* upperBound(state, x);
+      },
+    },
+    count: {
+      params: [{ ...valueParam, default: 40 }],
+      time: 'O(log n)',
+      code: 's.count({x});',
+      check: () => null,
+      *run(state, { x }) {
+        yield* count(state, x);
+      },
+    },
+    begin: {
+      params: [],
+      time: 'O(log n)',
+      code: 's.begin();',
+      check: () => null,
+      *run(state) {
+        yield* findMin(state);
+      },
+    },
+    clear: {
+      params: [],
+      time: 'O(n)',
+      code: 's.clear();',
+      check: () => null,
+      *run(state) {
+        yield* clear(state);
       },
     },
   },

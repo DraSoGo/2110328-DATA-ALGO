@@ -132,5 +132,76 @@ export default {
         yield { line: 0, msg: `top() is mData[0] = ${state.cells[0].value}, the highest priority value`, state, hl: { active: [0] } };
       },
     },
+    clear: {
+      params: [],
+      time: 'O(1)',
+      code: 'pq.clear();  // mSize = 0',
+      check: () => null,
+      *run(state) {
+        if (state.cells.length === 0) {
+          yield { line: 0, msg: 'mSize is already 0: nothing to clear', state, hl: {} };
+          return;
+        }
+        yield { line: 0, msg: `Forget all ${state.cells.length} element${state.cells.length === 1 ? '' : 's'}: only mSize changes, the array is not touched`, state, hl: { compare: indexes(0, state.cells.length) } };
+        state.cells = [];
+        yield { line: 0, msg: `mSize = 0: the queue is empty. mCap stays ${state.capacity}, the memory is kept for later pushes`, state, hl: {} };
+      },
+    },
+    erase: {
+      params: [{ name: 'i', min: 0, max: LIMIT - 1, default: 1 }],
+      time: 'O(log n)',
+      code: 'pq.erase({i});  // mData[i] = mData[mSize-1]; mSize--; then fixUp or fixDown',
+      check: (state, { i }) => {
+        if (state.cells.length === 0) return 'erase on an empty priority_queue is undefined behaviour';
+        return i >= state.cells.length ? `i must be between 0 and size - 1 (${state.cells.length - 1})` : null;
+      },
+      *run(state, { i }) {
+        const last = state.cells.length - 1;
+        const gone = state.cells[i].value;
+        yield { line: 0, msg: `Erase mData[${i}] = ${gone}: copy the last element mData[${last}] = ${state.cells[last].value} over it`, state, hl: { active: [i], compare: i === last ? [] : [last] } };
+        state.cells[i] = state.cells[last];
+        state.cells.pop();
+        if (i === last) {
+          yield { line: 0, msg: `${gone} was the last element: mSize-- (now ${state.cells.length}) and nothing else changes`, state, hl: {} };
+          return;
+        }
+        yield { line: 0, msg: `mSize-- (now ${state.cells.length}). The moved value ${state.cells[i].value} sits at index ${i}; it may be too big or too small for its place`, state, hl: { moved: [i] } };
+        const p = (i - 1) >> 1;
+        const up = i > 0 && state.cells[p].value < state.cells[i].value;
+        yield {
+          line: 0,
+          msg: i === 0
+            ? 'Index 0 has no parent: only fixDown(0) can be needed'
+            : `parent mData[${p}] = ${state.cells[p].value}; mLess(parent, value) is ${up}: ${up ? `${state.cells[i].value} beats its parent, fixUp(${i})` : `the parent is not lower, so fixDown(${i})`}`,
+          state,
+          hl: { compare: i === 0 ? [0] : [i, p] },
+        };
+        if (up) yield* fixUp(state, i);
+        else yield* fixDown(state, i);
+      },
+    },
+    assign: {
+      params: ['a', 'b', 'c', 'd', 'e', 'f'].map((name, k) => ({ name, min: -99, max: 99, default: [4, 1, 7, 3, 9, 6][k] })),
+      time: 'O(n)',
+      code: 'pq.assign({a}, {b}, {c}, {d}, {e}, {f});  // copy the array as is, then heapify bottom-up',
+      check: () => null,
+      *run(state, args) {
+        const input = ['a', 'b', 'c', 'd', 'e', 'f'].map((name) => args[name]);
+        const n = input.length;
+        const old = state.capacity;
+        let cap = old;
+        while (cap < n) cap *= 2;
+        state.cells = input.map((value) => newCell(state, value));
+        state.capacity = cap;
+        yield { line: 0, msg: `Copy ${n} values into mData in the given order (${input.join(', ')}); mSize = ${n}${cap !== old ? `, mCap grows ${old} -> ${cap} (the array is reallocated)` : ''}. It is not a heap yet`, state, hl: { moved: indexes(0, n) } };
+        const firstParent = (n >> 1) - 1;
+        yield { line: 0, msg: `Indexes ${firstParent + 1}..${n - 1} are leaves, each is a heap of one. Start at the last parent (${n} / 2 - 1 = ${firstParent}) and fixDown each parent down to 0`, state, hl: { done: indexes(firstParent + 1, n) } };
+        for (let i = firstParent; i >= 0; i -= 1) {
+          yield { line: 0, msg: `fixDown(${i}): the subtrees below index ${i} are heaps, so settle mData[${i}] = ${state.cells[i].value}`, state, hl: { active: [i] } };
+          yield* fixDown(state, i);
+        }
+        yield { line: 0, msg: 'Index 0 is settled: every parent is at least as high priority as its children, so the array is a heap. Building took O(n), not O(n log n)', state, hl: { done: [0] } };
+      },
+    },
   },
 };

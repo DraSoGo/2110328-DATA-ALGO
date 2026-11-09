@@ -23,7 +23,7 @@ const parentOf = (state, key) => state.nodes.find((node) => node.left === key ||
 export const labelFor = (state, k, v) => (state.mapped ? `${k}:${v}` : k);
 
 // Every op declares the same number of pointer rows, so the viewBox stays the same between ops.
-function setPointers(state, named) {
+export function setPointers(state, named) {
   const pointers = { ...named };
   for (let i = 0; Object.keys(pointers).length < POINTER_SLOTS; i += 1) pointers[`_${i}`] = null;
   state.pointers = pointers;
@@ -327,27 +327,90 @@ export function* find(state, k) {
   return found ? cur : null;
 }
 
-// lower_bound: the first element that is not less than k.
-export function* lowerBound(state, k) {
+// lower_bound (first element >= k) or upper_bound (first element > k): remember the last node that qualified (ans).
+function* bound(state, k, upper) {
+  const op = upper ? 'upper_bound' : 'lower_bound';
+  const rel = upper ? '>' : '>=';
   let cur = state.root;
   let ans = null;
   while (cur !== null) {
     const node = at(state, cur);
     setPointers(state, { cur, ans });
-    if (node.k >= k) {
+    if (upper ? node.k > k : node.k >= k) {
       ans = cur;
       setPointers(state, { cur, ans });
-      yield { line: 0, msg: `${node.k} >= ${k}: ${node.k} is a candidate; go left to look for a smaller one`, state, hl: { compare: [cur] } };
+      yield { line: 0, msg: `${node.k} ${rel} ${k}: ${node.k} is a candidate; go left to look for a smaller one`, state, hl: { compare: [cur] } };
       cur = node.left;
     } else {
-      yield { line: 0, msg: `${node.k} < ${k}: too small, go right`, state, hl: { compare: [cur], active: ans === null ? [] : [ans] } };
+      yield { line: 0, msg: `${node.k} ${upper ? '<=' : '<'} ${k}: too small, go right`, state, hl: { compare: [cur], active: ans === null ? [] : [ans] } };
       cur = node.right;
     }
   }
   setPointers(state, { cur: null, ans });
-  if (ans === null) yield { line: 0, msg: `Reached an empty link with no candidate: every element is < ${k}, so lower_bound returns end()`, state, hl: {} };
-  else yield { line: 0, msg: `Reached an empty link: the last candidate ${kOf(state, ans)} is the first element >= ${k}`, state, hl: { done: [ans] } };
+  if (ans === null) yield { line: 0, msg: `Reached an empty link with no candidate: every element is ${upper ? '<=' : '<'} ${k}, so ${op} returns end()`, state, hl: {} };
+  else yield { line: 0, msg: `Reached an empty link: the last candidate ${kOf(state, ans)} is the first element ${rel} ${k}`, state, hl: { done: [ans] } };
   return ans;
+}
+export const lowerBound = (state, k) => bound(state, k, false);
+export const upperBound = (state, k) => bound(state, k, true);
+
+// begin() / the maximum: follow left (or right) links to the end.
+export function* extreme(state, side) {
+  const name = side === 'left' ? 'minimum' : 'maximum';
+  let cur = state.root;
+  if (cur === null) {
+    setPointers(state, { cur: null });
+    yield { line: 0, msg: `The tree is empty: there is no ${name}, and begin() equals end()`, state, hl: {} };
+    return null;
+  }
+  for (;;) {
+    const node = at(state, cur);
+    setPointers(state, { cur });
+    if (node[side] === null) {
+      yield { line: 0, msg: `${node.k} has no ${side} child: it is the ${name}`, state, hl: { done: [cur] } };
+      return cur;
+    }
+    yield { line: 0, msg: `${node.k} has a ${side} child: keep going ${side}`, state, hl: { compare: [cur] } };
+    cur = node[side];
+  }
+}
+export const findMin = (state) => extreme(state, 'left');
+
+// count(k): keys are unique, so the result is 0 or 1. Returns the node key or null.
+export function* count(state, k) {
+  const { cur, found } = yield* descend(state, k, 'find', ['cur', 'p']);
+  setPointers(state, { cur: found ? cur : null });
+  yield { line: 0, msg: found ? `count(${k}) = 1: the key is present (a ${state.mapped ? 'map' : 'set'} never holds a key twice)` : `Reached an empty link: count(${k}) = 0`, state, hl: found ? { done: [cur] } : {} };
+  return found ? cur : null;
+}
+
+// clear(): delete every node in post-order (children first); the empty tree is a valid red-black tree.
+export function* clear(state) {
+  if (state.root === null) {
+    setPointers(state, {});
+    yield { line: 0, msg: 'The tree is already empty: clear() does nothing', state, hl: {} };
+    return;
+  }
+  const order = [];
+  const post = (key) => {
+    if (key === null) return;
+    post(at(state, key).left);
+    post(at(state, key).right);
+    order.push(key);
+  };
+  post(state.root);
+  for (const key of order) {
+    const parent = parentOf(state, key);
+    const name = kOf(state, key);
+    setPointers(state, { cur: key, p: parent });
+    yield { line: 0, msg: `Visit ${name}: both subtrees are already deleted, so delete this node now`, state, hl: { active: [key] } };
+    relink(state, parent, key, null);
+    state.nodes.splice(state.nodes.findIndex((n) => n.key === key), 1);
+    setPointers(state, { cur: null, p: parent });
+    yield { line: 0, msg: parent === null ? `Deleted ${name}, the root` : `Deleted ${name}; ${kOf(state, parent)} now has one fewer child`, state, hl: parent === null ? {} : { compare: [parent] } };
+  }
+  setPointers(state, {});
+  yield { line: 0, msg: 'Every node is deleted: the root is NULL and the size is 0 (an empty tree is a valid red-black tree)', state, hl: {} };
 }
 
 // operator[] / insert_or_assign helper for map: set the mapped value of an existing node.

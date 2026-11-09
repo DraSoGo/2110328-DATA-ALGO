@@ -95,5 +95,86 @@ export default {
         yield { line: 0, msg: `back() is ${state.cells[at].value}, at slot (front + size - 1) % capacity = ${at}`, state, hl: { active: [at] } };
       },
     },
+    clear: {
+      params: [],
+      time: 'O(1)',
+      code: 'q.clear();',
+      *run(state) {
+        const used = indexes(state.size).map((k) => slotOf(state, k));
+        yield { line: 0, msg: `Drop all ${state.size} element${state.size === 1 ? '' : 's'}: set mSize = 0 and mFront = 0; the old values stay in memory`, state, hl: { compare: used } };
+        state.cells = Array(state.capacity).fill(null);
+        state.size = 0;
+        state.front = 0;
+        sync(state);
+        yield { line: 0, msg: `mSize is 0, mFront is 0; mCap stays ${state.capacity}`, state, hl: {} };
+      },
+    },
+    move_to_back: {
+      params: [{ name: 'pos', min: 0, max: LIMIT - 1, default: 0 }],
+      time: 'O(n - pos)',
+      code: 'q.move_to_back({pos});',
+      check: (state, { pos }) => {
+        if (state.size === 0) return 'move_to_back on an empty queue is undefined behaviour';
+        return pos >= state.size ? `pos must be below size (${state.size})` : null;
+      },
+      *run(state, { pos }) {
+        const from = slotOf(state, pos);
+        const held = state.cells[from];
+        state.cells[from] = null;
+        yield { line: 0, msg: `Save the element at position ${pos} (slot (mFront + ${pos}) % mCap = ${from}, value ${held.value}) in a temporary`, state, hl: { active: [from] } };
+        for (let k = pos; k < state.size - 1; k += 1) {
+          const [to, src] = [slotOf(state, k), slotOf(state, k + 1)];
+          state.cells[to] = state.cells[src];
+          state.cells[src] = null;
+          yield { line: 0, msg: `Move slot ${src} (${state.cells[to].value}) one position forward into slot ${to}`, state, hl: { moved: [to] } };
+        }
+        const last = slotOf(state, state.size - 1);
+        state.cells[last] = held;
+        yield { line: 0, msg: `Write ${held.value} into the back slot ${last}; mFront ${state.front} and mSize ${state.size} do not change`, state, hl: { active: [last] } };
+      },
+    },
+    move_to_front: {
+      params: [{ name: 'pos', min: 0, max: LIMIT - 1, default: 2 }],
+      time: 'O(pos)',
+      code: 'q.move_to_front({pos});',
+      check: (state, { pos }) => {
+        if (state.size === 0) return 'move_to_front on an empty queue is undefined behaviour';
+        return pos >= state.size ? `pos must be below size (${state.size})` : null;
+      },
+      *run(state, { pos }) {
+        const from = slotOf(state, pos);
+        const held = state.cells[from];
+        state.cells[from] = null;
+        yield { line: 0, msg: `Save the element at position ${pos} (slot (mFront + ${pos}) % mCap = ${from}, value ${held.value}) in a temporary`, state, hl: { active: [from] } };
+        for (let k = pos; k > 0; k -= 1) {
+          const [to, src] = [slotOf(state, k), slotOf(state, k - 1)];
+          state.cells[to] = state.cells[src];
+          state.cells[src] = null;
+          yield { line: 0, msg: `Move slot ${src} (${state.cells[to].value}) one position back into slot ${to}`, state, hl: { moved: [to] } };
+        }
+        state.cells[state.front] = held;
+        yield { line: 0, msg: `Write ${held.value} into the front slot ${state.front}; mFront ${state.front} and mSize ${state.size} do not change`, state, hl: { active: [state.front] } };
+      },
+    },
+    reverse: {
+      params: [{ name: 'a', min: 0, max: LIMIT - 1, default: 0 }, { name: 'b', min: 0, max: LIMIT - 1, default: 2 }],
+      time: 'O(b - a)',
+      code: 'q.reverse({a}, {b});',
+      check: (state, { a, b }) => {
+        if (a > b) return 'a must be <= b';
+        return b >= state.size ? `b must be below size (${state.size})` : null;
+      },
+      *run(state, { a, b }) {
+        const range = indexes(b - a + 1).map((k) => slotOf(state, a + k));
+        yield { line: 0, msg: `Reverse positions ${a}..${b}: they sit in slots ${range.join(', ')} (wrapping with % mCap, mFront = ${state.front})`, state, hl: { compare: range } };
+        for (let i = a, j = b; i < j; i += 1, j -= 1) {
+          const [si, sj] = [slotOf(state, i), slotOf(state, j)];
+          const msg = `Swap position ${i} (slot ${si}, ${state.cells[si].value}) with position ${j} (slot ${sj}, ${state.cells[sj].value})`;
+          [state.cells[si], state.cells[sj]] = [state.cells[sj], state.cells[si]];
+          yield { line: 0, msg, state, hl: { moved: [si, sj] } };
+        }
+        yield { line: 0, msg: `Done: mFront ${state.front}, mSize ${state.size} and mCap ${state.capacity} are unchanged; only the order inside the range changed`, state, hl: { done: range } };
+      },
+    },
   },
 };

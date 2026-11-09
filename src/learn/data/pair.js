@@ -99,5 +99,41 @@ export default {
         yield { line: 0, msg: `size becomes ${state.cells.length}; capacity stays ${state.capacity}`, state, hl: {} };
       },
     },
+    assign: {
+      params: [{ name: 'i', min: 0, max: LIMIT - 1, default: 1 }, numberParam('a', 4), numberParam('b', 9)],
+      time: 'O(1)',
+      code: 'v[{i}] = make_pair({a}, {b});',
+      check: (state, { i }) => (i >= state.cells.length ? `i must be below size (${state.cells.length})` : null),
+      *run(state, { i, a, b }) {
+        const old = state.cells[i];
+        yield { line: 0, msg: `make_pair(${a}, ${b}) builds a temporary pair`, state, hl: { compare: [i] } };
+        state.cells[i] = { key: old.key, value: show([a, b]), pair: [a, b] };
+        yield { line: 0, msg: `v[${i}] = ${show([a, b])} overwrites ${old.value}: both first and second are copied; mSize stays ${state.cells.length}`, state, hl: { active: [i] } };
+      },
+    },
+    swap_members: {
+      params: [{ name: 'i', min: 0, max: LIMIT - 1, default: 0 }],
+      time: 'O(1)',
+      code: 'swap(v[{i}].first, v[{i}].second);',
+      check: (state, { i }) => (i >= state.cells.length ? `i must be below size (${state.cells.length})` : null),
+      *run(state, { i }) {
+        const [a, b] = state.cells[i].pair;
+        yield { line: 0, msg: `v[${i}] is ${show([a, b])}: swap its first (${a}) with its second (${b})`, state, hl: { compare: [i] } };
+        state.cells[i].pair = [b, a];
+        state.cells[i].value = show([b, a]);
+        yield { line: 0, msg: `v[${i}] is now ${show([b, a])}; the order of the pairs in the vector is unchanged`, state, hl: { active: [i] } };
+      },
+    },
+    clear: {
+      params: [],
+      time: 'O(1)',
+      code: 'v.clear();',
+      *run(state) {
+        const was = state.cells.length;
+        yield { line: 0, msg: `clear() only sets mSize = 0; the ${was} pair${was === 1 ? '' : 's'} stay in memory but are no longer in the vector`, state, hl: { compare: indexes(was) } };
+        state.cells = [];
+        yield { line: 0, msg: `mSize is 0; mCap stays ${state.capacity}, nothing is freed`, state, hl: {} };
+      },
+    },
   },
 };

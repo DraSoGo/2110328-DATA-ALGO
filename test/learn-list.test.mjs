@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { record } from '../src/learn/engine/recorder.js';
-import list, { LIMIT, values } from '../src/learn/data/list.js';
+import list, { LIMIT, values, relink } from '../src/learn/data/list.js';
 import { renderLinked } from '../src/learn/render/linked.js';
 
 function run(state, opName, args = {}) {
@@ -172,4 +172,95 @@ test('Big O is explicit about the walk', () => {
   assert.match(list.ops.insert.time, /O\(k\)/);
   assert.match(list.complexity.note, /O\(1\)/);
   assert.match(list.complexity.note, /O\(k\)/);
+});
+
+const listOf = (...vals) => {
+  const state = list.preset();
+  state.nodes = vals.map((value, i) => ({ key: `n${i}`, value }));
+  state.nextKey = vals.length;
+  relink(state);
+  return state;
+};
+const rot = (a, k) => (a.length ? a.map((_, i) => a[(((i + k) % a.length) + a.length) % a.length]) : []);
+
+test('clear erases from the front one node at a time', () => {
+  const { frames, state } = run(list.preset(), 'clear');
+  assert.deepEqual(state.nodes, []);
+  assert.equal(state.header.next, 'h');
+  assert.equal(state.header.prev, 'h');
+  assertCircular(state);
+  assert.equal(frames.filter((frame) => /^delete x; mSize--/.test(frame.msg)).length, 3);
+  assert.match(frames.at(-1).msg, /^mSize == 0/);
+  const again = run(state, 'clear');
+  assert.equal(again.frames.length, 1);
+  assert.deepEqual(again.state.nodes, []);
+});
+
+test('reverse flips every arrow, header included, and matches Array.reverse', () => {
+  for (const vals of [[], [5], [1, 2], [10, 20, 30], [1, 2, 3, 4, 5, 6, 7, 8]]) {
+    const { frames, state } = run(listOf(...vals), 'reverse');
+    assert.deepEqual(values(state), [...vals].reverse(), `walk next ${vals}`);
+    assert.deepEqual(state.nodes.map((n) => n.value), [...vals].reverse());
+    assertCircular(state);
+    assert.equal(frames.filter((f) => /^swap\(/.test(f.msg)).length, vals.length + 1, 'one swap per node plus the header');
+  }
+  const { frames } = run(list.preset(), 'reverse');
+  const afterHeader = frames.find((f) => /^swap\(mHeader->next/.test(f.msg)).state;
+  assert.equal(afterHeader.header.next, 'n2');
+  assert.equal(afterHeader.header.prev, 'n0');
+  assert.equal(afterHeader.nodes[0].prev, 'h', 'other nodes not yet swapped');
+});
+
+test('remove erases every node equal to x', () => {
+  const cases = [[[10, 20, 30], 20], [[1, 1, 1], 1], [[1, 2, 1, 3, 1], 1], [[5, 6, 7, 5], 5], [[4, 8], 9], [[], 3], [[2, 2, 3], 2]];
+  for (const [vals, x] of cases) {
+    const { state, frames } = run(listOf(...vals), 'remove', { x });
+    const ref = vals.filter((v) => v !== x);
+    assert.deepEqual(values(state), ref, `${vals} remove ${x}`);
+    assert.deepEqual(state.nodes.map((n) => n.value), ref);
+    assertCircular(state);
+    assert.equal(frames.filter((f) => /^delete x; mSize--/.test(f.msg)).length, vals.length - ref.length);
+  }
+  assert.match(run(list.preset(), 'remove', { x: 99 }).frames.at(-1).msg, /no node held 99/);
+  assert.match(run(list.preset(), 'remove', { x: 20 }).frames.at(-1).msg, /erased 1 element equal to 20/);
+});
+
+test('shift rotates left for k > 0 and right for k < 0, moving only the header', () => {
+  const course = [['ABCDE', 1, 'BCDEA'], ['ABCDE', 4, 'EABCD'], ['ABCDE', -2, 'DEABC'], ['A', 100, 'A'], ['ABC', 100, 'BCA']];
+  for (const [from, k, to] of course) {
+    const vals = [...from].map((c) => c.charCodeAt(0));
+    const { state } = run(listOf(...vals), 'shift', { k });
+    assert.equal(String.fromCharCode(...values(state)), to, `${from} shift ${k}`);
+    assertCircular(state);
+  }
+  for (let n = 1; n <= 8; n += 1) {
+    const vals = Array.from({ length: n }, (_, i) => i * 3 + 1);
+    for (const k of [-20, -9, -8, -1, 0, 1, 3, 7, 8, 20]) {
+      const { state, frames } = run(listOf(...vals), 'shift', { k });
+      assert.deepEqual(values(state), rot(vals, k), `n=${n} k=${k}`);
+      assert.deepEqual(state.nodes.map((x) => x.value), rot(vals, k));
+      assert.equal(state.nodes.length, n);
+      assertCircular(state);
+      assert.ok(!frames.some((f) => /^Create a node|^delete x/.test(f.msg)), 'no node is created or deleted');
+    }
+  }
+  assert.match(run(list.preset(), 'shift', { k: 3 }).frames[0].msg, /= 0: .*already in place/);
+  assert.match(list.ops.shift.check(empty(), { k: 1 }), /size > 0/);
+  assert.equal(list.ops.shift.check(list.preset(), { k: 1 }), null);
+});
+
+test('new list ops: unique keys, one viewBox, defaults valid', () => {
+  const boxes = new Set();
+  for (const name of ['clear', 'reverse', 'remove', 'shift']) {
+    const args = Object.fromEntries(list.ops[name].params.map((p) => [p.name, p.default]));
+    assert.equal(list.ops[name].check?.(list.preset(), args) ?? null, null);
+    for (const frame of run(list.preset(), name, args).frames) {
+      const svg = renderLinked(frame.state, frame.hl);
+      const keys = svg.match(/data-key="[^"]+"/g);
+      assert.equal(new Set(keys).size, keys.length, `${name}: ${frame.msg}`);
+      boxes.add(svg.match(/viewBox="([^"]+)"/)[1]);
+    }
+  }
+  assert.equal(boxes.size, 1);
+  assert.match(list.ops.reverse.time, /O\(n\)/);
 });

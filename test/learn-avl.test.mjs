@@ -183,3 +183,46 @@ test('random insert/erase sequences keep every AVL invariant after every op', ()
     assert.equal(seen.size, 4, `seed ${seed} saw ${[...seen]}`);
   }
 });
+
+test('begin, find_max, lower_bound, clear match a sorted array and keep the AVL tree valid', async () => {
+  const frames = (name, s, args) => record(avl.ops[name].run(structuredClone(s), args));
+  const labelOf = (s, fs) => {
+    const d = fs.at(-1).hl.done;
+    return d?.length ? s.nodes.find((n) => n.key === d[0]).label : null;
+  };
+  const vals = [40, 20, 60, 10, 30, 50, 5, 15, 25, 35, 45, 55, 70, 80];
+  let s = avl.preset();
+  for (const x of vals.slice(6)) s = frames('insert', s, { x }).at(-1).state;
+  const sorted = [...s.nodes.map((n) => n.label)].sort((a, b) => a - b);
+  const check = (fs) => {
+    assert.ok(fs.length < 2000);
+    for (const f of fs) {
+      assert.ok(f.msg);
+      assert.equal(new Set(f.state.nodes.map((n) => n.key)).size, f.state.nodes.length);
+      assert.deepEqual(Object.keys(f.state.pointers), ['cur', 'parent', 'succ', 'r']);
+    }
+  };
+  const fmin = frames('begin', s, {});
+  const fmax = frames('find_max', s, {});
+  check(fmin);
+  check(fmax);
+  assert.equal(labelOf(s, fmin), sorted[0]);
+  assert.equal(labelOf(s, fmax), sorted.at(-1));
+  for (let x = 0; x <= 90; x += 1) {
+    const fs = frames('lower_bound', s, { x });
+    check(fs);
+    assert.equal(labelOf(s, fs), sorted.find((v) => v >= x) ?? null, `lower_bound ${x}`);
+    assert.deepEqual(fs.at(-1).state.nodes, s.nodes);
+  }
+  const cleared = frames('clear', s, {});
+  check(cleared);
+  const end = cleared.at(-1).state;
+  assert.equal(end.root, null);
+  assert.deepEqual(end.nodes, []);
+  assert.equal(avl.ops.clear.check(s, {}), null);
+  const again = frames('insert', end, { x: 7 }).at(-1).state;
+  assert.equal(again.nodes.length, 1);
+  assert.equal(again.nodes[0].h, 0);
+  for (const name of ['begin', 'find_max', 'clear']) assert.match(frames(name, end, {}).at(-1).msg, /empty/);
+  for (const name of ['begin', 'find_max', 'lower_bound', 'clear']) assert.match(avl.ops[name].time, /^O\(/);
+});

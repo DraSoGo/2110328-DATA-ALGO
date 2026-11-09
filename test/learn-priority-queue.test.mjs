@@ -106,3 +106,97 @@ test('frame counts stay small at the size limit', () => {
   assert.equal(state.cells.length, LIMIT);
   assert.ok(runOp('pop', state).frames.length < 40);
 });
+
+const drain = (state) => {
+  const out = [];
+  let s = state;
+  while (s.cells.length) {
+    out.push(s.cells[0].value);
+    s = runOp('pop', s).state;
+  }
+  return out;
+};
+const uniqueKeys = (state) => new Set(state.cells.map((c) => c.key)).size === state.cells.length;
+
+test('clear drops every element and keeps mCap', () => {
+  const { frames, state } = runOp('clear', pq.preset());
+  assert.deepEqual(values(state), []);
+  assert.equal(state.capacity, 4);
+  assert.match(frames.at(-1).msg, /mSize = 0.*mCap stays 4/);
+  assert.match(runOp('clear', state).frames[0].msg, /already 0/);
+  const after = runOp('push', state, { x: 3 }).state;
+  assert.deepEqual(values(after), [3]);
+});
+
+test('erase(i) replaces with the last element, then fixUp or fixDown', () => {
+  // fixDown case: erase root of 9 8 7 5 6 -> last 6 goes to the root
+  const a = runOp('erase', heapOf([9, 8, 7, 5, 6]), { i: 0 });
+  assert.deepEqual(values(a.state), [8, 6, 7, 5]);
+  assert.ok(a.frames.some((f) => /fixDown/.test(f.msg)));
+  // fixUp case: 20 10 15 8 9 14 3 -> erase index 3 (8): last 3 moves there, still below parent: fixDown no-op
+  const b = runOp('erase', heapOf([20, 10, 15, 8, 9, 14, 3]), { i: 3 });
+  assert.deepEqual(values(b.state), [20, 10, 15, 3, 9, 14]);
+  // fixUp case: 50 10 40 8 9 30 35 -> erase index 3 (8): last 35 lands under 10 and beats it
+  const c = runOp('erase', heapOf([50, 10, 40, 8, 9, 30, 35]), { i: 3 });
+  assert.deepEqual(values(c.state), [50, 35, 40, 10, 9, 30]);
+  assert.ok(c.frames.some((f) => /fixUp\(3\)/.test(f.msg)));
+  // last index and singleton
+  assert.deepEqual(values(runOp('erase', heapOf([9, 5, 7]), { i: 2 }).state), [9, 5]);
+  assert.deepEqual(values(runOp('erase', heapOf([9]), { i: 0 }).state), []);
+  assert.match(pq.ops.erase.check(heapOf([9, 5, 7]), { i: 3 }), /between 0 and size - 1 \(2\)/);
+  assert.match(pq.ops.erase.check(heapOf([]), { i: 0 }), /empty priority_queue/);
+  assert.equal(pq.ops.erase.check(pq.preset(), { i: 1 }), null);
+});
+
+test('random erase(i) keeps the heap and removes exactly that element', () => {
+  const next = rng(7);
+  let state = pq.preset();
+  const ref = [9, 5, 7];
+  for (let step = 0; step < 150; step += 1) {
+    if (state.cells.length < 4 || (state.cells.length < LIMIT && next() < 0.5)) {
+      const x = Math.floor(next() * 40) - 10;
+      state = runOp('push', state, { x }).state;
+      ref.push(x);
+    } else {
+      const i = Math.floor(next() * state.cells.length);
+      const gone = state.cells[i].value;
+      state = runOp('erase', state, { i }).state;
+      ref.splice(ref.indexOf(gone), 1);
+    }
+    assert.equal(isHeap(state), true, `step ${step}`);
+    assert.deepEqual([...values(state)].sort((p, q) => p - q), [...ref].sort((p, q) => p - q));
+    assert.ok(uniqueKeys(state));
+  }
+});
+
+test('assign builds a heap bottom-up from the given array', () => {
+  const defaults = Object.fromEntries(pq.ops.assign.params.map((p) => [p.name, p.default]));
+  const { frames, state } = runOp('assign', pq.preset(), defaults);
+  const input = Object.values(defaults);
+  assert.equal(isHeap(state), true);
+  assert.deepEqual([...values(state)].sort((p, q) => p - q), [...input].sort((p, q) => p - q));
+  assert.deepEqual(drain(state), [...input].sort((p, q) => q - p));
+  assert.equal(state.capacity, 8, 'mCap 4 doubles to hold 6');
+  assert.deepEqual(frames[0].state.cells.map((c) => c.value), input, 'first frame is the raw copy, not yet a heap');
+  assert.equal(isHeap(frames[0].state), false);
+  assert.match(frames[0].msg, /mCap grows 4 -> 8/);
+  assert.deepEqual(frames.filter((f) => /^fixDown\(\d\):/.test(f.msg)).map((f) => f.msg.match(/fixDown\((\d)\)/)[1]), ['2', '1', '0']);
+  assert.ok(uniqueKeys(state));
+  const next = rng(3);
+  for (let t = 0; t < 40; t += 1) {
+    const args = Object.fromEntries(['a', 'b', 'c', 'd', 'e', 'f'].map((n) => [n, Math.floor(next() * 7) - 3]));
+    const out = runOp('assign', heapOf([1, 2, 3], 4), args).state;
+    assert.equal(isHeap(out), true, JSON.stringify(args));
+    assert.deepEqual([...values(out)].sort((p, q) => p - q), Object.values(args).sort((p, q) => p - q));
+  }
+});
+
+test('new pq ops: defaults pass check and keys are unique per frame', () => {
+  for (const name of ['clear', 'erase', 'assign']) {
+    const args = Object.fromEntries(pq.ops[name].params.map((p) => [p.name, p.default]));
+    assert.equal(pq.ops[name].check(pq.preset(), args), null);
+    for (const frame of runOp(name, pq.preset(), args).frames) assert.ok(uniqueKeys(frame.state), `${name}: ${frame.msg}`);
+  }
+  assert.equal(pq.ops.erase.time, 'O(log n)');
+  assert.equal(pq.ops.assign.time, 'O(n)');
+});

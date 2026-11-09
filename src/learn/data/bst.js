@@ -49,6 +49,91 @@ function* descend(state, x, verb) {
   return { cur: null, parent, found: false };
 }
 
+const parentKey = (state, key) => state.nodes.find((node) => node.left === key || node.right === key)?.key ?? null;
+const keyIfFound = (state, x) => state.nodes.find((node) => node.label === x)?.key ?? null;
+
+// Shared (also used by the AVL module): `setP(state, cur, parent, succ)` writes that module's fixed pointer names.
+// find_min_node / find_max_node: follow left (or right) links until there is none.
+export function* walkExtreme(state, side, setP = setPointers) {
+  const name = side === 'left' ? 'minimum' : 'maximum';
+  let cur = state.root;
+  let parent = null;
+  if (cur === null) {
+    setP(state);
+    yield { line: 0, msg: `The tree is empty: there is no ${name}, and begin() equals end()`, state, hl: {} };
+    return null;
+  }
+  for (;;) {
+    const node = at(state, cur);
+    setP(state, cur, parent);
+    const next = node[side];
+    if (next === null) {
+      yield { line: 0, msg: `${node.label} has no ${side} child: it is the ${name} of the tree`, state, hl: { done: [cur] } };
+      return cur;
+    }
+    yield { line: 0, msg: `${node.label} has a ${side} child: keep going ${side} to ${label(state, next)}`, state, hl: { compare: [cur] } };
+    parent = cur;
+    cur = next;
+  }
+}
+
+// lower_bound (first element >= x) or upper_bound (first element > x): remember the last node that qualified (succ).
+export function* walkBound(state, x, upper, setP = setPointers) {
+  const op = upper ? 'upper_bound' : 'lower_bound';
+  const rel = upper ? '>' : '>=';
+  let cur = state.root;
+  let parent = null;
+  let succ = null;
+  while (cur !== null) {
+    const node = at(state, cur);
+    setP(state, cur, parent, succ);
+    const qualifies = upper ? node.label > x : node.label >= x;
+    if (qualifies) {
+      succ = cur;
+      setP(state, cur, parent, succ);
+      yield { line: 0, msg: `${node.label} ${rel} ${x}: it is a candidate answer; go left to look for a smaller one`, state, hl: { compare: [cur] } };
+      parent = cur;
+      cur = node.left;
+    } else {
+      yield { line: 0, msg: `${node.label} ${upper ? '<=' : '<'} ${x}: too small, so the answer is to the right`, state, hl: { compare: [cur], active: succ === null ? [] : [succ] } };
+      parent = cur;
+      cur = node.right;
+    }
+  }
+  setP(state, null, parent, succ);
+  if (succ === null) yield { line: 0, msg: `Reached an empty link with no candidate: nothing is ${rel} ${x}, so ${op} returns end()`, state, hl: {} };
+  else yield { line: 0, msg: `Reached an empty link: the last candidate ${label(state, succ)} is the first element ${rel} ${x}`, state, hl: { done: [succ] } };
+  return succ;
+}
+
+// clear(): delete every node in post-order (children first), as the recursive course clear() does.
+export function* clearTree(state, setP = setPointers) {
+  if (state.root === null) {
+    yield { line: 0, msg: 'The tree is already empty: clear() does nothing', state, hl: {} };
+    return;
+  }
+  const order = [];
+  const post = (key) => {
+    if (key === null) return;
+    post(at(state, key).left);
+    post(at(state, key).right);
+    order.push(key);
+  };
+  post(state.root);
+  for (const key of order) {
+    const parent = parentKey(state, key);
+    const name = label(state, key);
+    setP(state, key, parent);
+    yield { line: 0, msg: `Visit ${name}: both subtrees are already deleted, so delete this node now`, state, hl: { active: [key] } };
+    relink(state, parent, key, null);
+    state.nodes.splice(state.nodes.findIndex((n) => n.key === key), 1);
+    setP(state, null, parent);
+    yield { line: 0, msg: parent === null ? `Deleted ${name}, the root` : `Deleted ${name}; ${label(state, parent)} now has one fewer child`, state, hl: parent === null ? {} : { compare: [parent] } };
+  }
+  setP(state);
+  yield { line: 0, msg: 'Every node is deleted: root is NULL and the size is 0', state, hl: {} };
+}
+
 export default {
   id: 'bst',
   side: 'data',
@@ -169,6 +254,98 @@ export default {
         setPointers(state, found ? cur : null);
         if (!found) yield { line: 0, msg: `Reached an empty link: ${x} is not in the tree, find returns end()`, state, hl: {} };
         else yield { line: 0, msg: `find(${x}) returns an iterator to this node`, state, hl: { done: [cur] } };
+      },
+    },
+    begin: {
+      params: [],
+      time: 'O(h)',
+      code: 't.begin();',
+      check: () => null,
+      *run(state) {
+        yield* walkExtreme(state, 'left');
+      },
+    },
+    find_max: {
+      params: [],
+      time: 'O(h)',
+      code: 't.find_max_node(t.mRoot);',
+      check: () => null,
+      *run(state) {
+        yield* walkExtreme(state, 'right');
+      },
+    },
+    lower_bound: {
+      params: [{ ...valueParam, default: 45 }],
+      time: 'O(h)',
+      code: 't.lower_bound({x});',
+      check: () => null,
+      *run(state, { x }) {
+        yield* walkBound(state, x, false);
+      },
+    },
+    upper_bound: {
+      params: [{ ...valueParam, default: 40 }],
+      time: 'O(h)',
+      code: 't.upper_bound({x});',
+      check: () => null,
+      *run(state, { x }) {
+        yield* walkBound(state, x, true);
+      },
+    },
+    successor: {
+      params: [{ ...valueParam, default: 30 }],
+      time: 'O(h)',
+      code: 'auto it = t.find({x}); ++it;',
+      check: () => null,
+      *run(state, { x }) {
+        const { cur, found } = yield* descend(state, x, 'find');
+        if (!found) {
+          setPointers(state);
+          yield { line: 0, msg: `${x} is not in the tree: find returns end(), and ++end() is undefined, so there is no successor to show`, state, hl: {} };
+          return;
+        }
+        let ptr = cur;
+        const right = at(state, ptr).right;
+        if (right !== null) {
+          yield { line: 0, msg: `${x} has a right child: the successor is the minimum of the right subtree`, state, hl: { active: [ptr], compare: [right] } };
+          let parent = ptr;
+          ptr = right;
+          setPointers(state, ptr, parent);
+          while (at(state, ptr).left !== null) {
+            yield { line: 0, msg: `${label(state, ptr)} has a left child: keep going left`, state, hl: { compare: [ptr] } };
+            parent = ptr;
+            ptr = at(state, ptr).left;
+            setPointers(state, ptr, parent);
+          }
+          setPointers(state, ptr, parent, ptr);
+          yield { line: 0, msg: `${label(state, ptr)} has no left child: it is the successor of ${x}`, state, hl: { done: [ptr] } };
+          return;
+        }
+        yield { line: 0, msg: `${x} has no right child: climb with the parent pointers while we are a right child`, state, hl: { active: [ptr] } };
+        let parent = parentKey(state, ptr);
+        setPointers(state, ptr, parent);
+        while (parent !== null && at(state, parent).right === ptr) {
+          yield { line: 0, msg: `${label(state, ptr)} is the right child of ${label(state, parent)}: ${label(state, parent)} is smaller, so move up`, state, hl: { compare: [ptr, parent] } };
+          ptr = parent;
+          parent = parentKey(state, ptr);
+          setPointers(state, ptr, parent);
+        }
+        if (parent === null) {
+          setPointers(state, null, null);
+          yield { line: 0, msg: `We reached the root from its right side: ${x} is the largest key, so ++ gives end() (no successor)`, state, hl: {} };
+          return;
+        }
+        setPointers(state, parent, parentKey(state, parent), parent);
+        yield { line: 0, msg: `${label(state, ptr)} is the left child of ${label(state, parent)}: the parent is the successor of ${x}`, state, hl: { done: [parent] } };
+      },
+    },
+    clear: {
+      params: [],
+      time: 'O(n)',
+      code: 't.clear();',
+      check: () => null,
+      *run(state) {
+        yield* clearTree(state);
       },
     },
   },

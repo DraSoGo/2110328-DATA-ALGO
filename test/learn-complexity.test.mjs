@@ -73,3 +73,12 @@ test('findN0 returns the first n from which the inequality holds to the end of t
   assert.equal(findN0((n) => n * n <= n, 60), null);
   assert.equal(findN0(() => true, 60), 1);
 });
+
+test('every complexity class has example code and an explanation in both languages', async () => {
+  const { DICT } = await import('../src/lib/i18n.js');
+  for (const cls of CLASSES) {
+    assert.ok(Array.isArray(cls.example) && cls.example.length >= 2, cls.id);
+    assert.ok(DICT.en[`gw.ex.${cls.id}`], `en gw.ex.${cls.id}`);
+    assert.ok(DICT.th[`gw.ex.${cls.id}`], `th gw.ex.${cls.id}`);
+  }
+});

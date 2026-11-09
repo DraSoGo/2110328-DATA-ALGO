@@ -84,3 +84,75 @@ test('random module ops keep a valid red-black tree that matches a Map', () => {
     }
   }
 });
+
+test('count, lower_bound, upper_bound match a sorted reference', () => {
+  const s = map.preset();
+  const ks = PRESET.map(([k]) => k);
+  for (let k = 0; k <= 80; k += 5) {
+    const lb = runOp('lower_bound', s, { k });
+    const ub = runOp('upper_bound', s, { k });
+    const wl = ks.find((v) => v >= k);
+    const wu = ks.find((v) => v > k);
+    assert.equal(lb.frames.at(-1).hl.done?.[0], wl === undefined ? undefined : keyOf(s, wl), `lower_bound ${k}`);
+    assert.equal(ub.frames.at(-1).hl.done?.[0], wu === undefined ? undefined : keyOf(s, wu), `upper_bound ${k}`);
+    assert.deepEqual(lb.state.nodes, s.nodes);
+    assert.match(runOp('count', s, { k }).frames.at(-1).msg, ks.includes(k) ? /count\(\d+\) = 1/ : /count\(\d+\) = 0/);
+  }
+  assert.match(runOp('lower_bound', s, { k: 45 }).frames.at(-1).msg, /50:25/);
+});
+
+test('at returns the value of a present key; a missing key throws out_of_range and changes nothing', () => {
+  const hit = runOp('at', map.preset(), { k: 30 });
+  assert.match(hit.frames.at(-1).msg, /value 9/);
+  assert.deepEqual(hit.frames.at(-1).hl.done, [keyOf(map.preset(), 30)]);
+  const miss = runOp('at', map.preset(), { k: 31 });
+  assert.match(miss.frames.at(-1).msg, /std::out_of_range/);
+  assert.match(miss.frames.at(-1).msg, /std::map::at throws/);
+  assert.deepEqual(miss.state.nodes, map.preset().nodes);
+  assert.match(runOp('at', map.preset(), { k: 80 }).frames.at(-1).msg, /out_of_range/);
+});
+
+test('clear leaves a valid empty map; ops on it are safe; defaults pass check', () => {
+  const out = runOp('clear', map.preset(), {});
+  assert.equal(out.state.root, null);
+  assert.deepEqual(out.state.nodes, []);
+  assertRedBlack(out.state);
+  assert.match(runOp('clear', out.state, {}).frames.at(-1).msg, /empty/);
+  assert.match(runOp('at', out.state, { k: 1 }).frames.at(-1).msg, /out_of_range/);
+  assert.match(runOp('lower_bound', out.state, { k: 1 }).frames.at(-1).msg, /end\(\)/);
+  const again = runOp('operator[]', out.state, { k: 3, v: 4 });
+  assert.deepEqual(entries(again.state), [[3, 4]]);
+  assertRedBlack(again.state);
+  for (const name of ['count', 'lower_bound', 'upper_bound', 'at', 'clear']) {
+    assert.match(map.ops[name].time, /^O\(/);
+    const args = Object.fromEntries(map.ops[name].params.map((p) => [p.name, p.default]));
+    assert.equal(map.ops[name].check(map.preset(), args), null);
+  }
+});
+
+test('random count/bounds/at/clear keep map and reference in step', () => {
+  const next = rng(321);
+  let state = map.preset();
+  const ref = new Map(PRESET);
+  for (let step = 0; step < 300; step += 1) {
+    const k = Math.floor(next() * 31);
+    const r = next();
+    const op = r < 0.4 ? 'insert' : r < 0.6 ? 'erase' : r < 0.7 ? 'upper_bound' : r < 0.8 ? 'lower_bound' : r < 0.9 ? 'at' : r < 0.97 ? 'count' : 'clear';
+    const args = op === 'clear' ? {} : op === 'insert' ? { k, v: step % 100 } : { k };
+    if (map.ops[op].check(state, args)) continue;
+    const out = runOp(op, state, args);
+    state = out.state;
+    if (op === 'insert' && !ref.has(k)) ref.set(k, step % 100);
+    if (op === 'erase') ref.delete(k);
+    if (op === 'clear') ref.clear();
+    const sorted = [...ref.keys()].sort((a, b) => a - b);
+    const last = out.frames.at(-1);
+    if (op === 'upper_bound' || op === 'lower_bound') {
+      const want = sorted.find((v) => (op === 'upper_bound' ? v > k : v >= k));
+      assert.equal(last.hl.done?.[0], want === undefined ? undefined : keyOf(state, want));
+    }
+    if (op === 'at') assert.match(last.msg, ref.has(k) ? new RegExp(`value ${ref.get(k)}`) : /out_of_range/);
+    assertRedBlack(state);
+    assert.deepEqual(keys(state), sorted);
+  }
+});

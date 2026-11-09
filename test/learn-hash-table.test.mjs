@@ -151,6 +151,88 @@ test('check: key cap, and the viewBox never changes during any op', () => {
 });
 
 test('Big O strings say average and the note explains the worst case', () => {
-  for (const op of Object.values(table.ops)) assert.equal(op.time, 'O(1) avg');
+  for (const name of ['insert', 'find', 'erase', 'count']) assert.equal(table.ops[name].time, 'O(1) avg');
+  assert.equal(table.ops.rehash.time, 'O(n)');
+  assert.equal(table.ops.clear.time, 'O(m + n)');
   assert.match(table.complexity.note, /Worst case O\(n\)/);
+});
+
+test('count returns 1 or 0 and leaves the table alone', () => {
+  for (const [x, want] of [[7, 1], [22, 1], [8, 0], [2, 0]]) {
+    const { frames, state } = run(table.preset(), 'count', { x });
+    assert.match(frames.at(-1).msg, new RegExp(`^count\\(${x}\\) returns ${want}`));
+    assert.deepEqual(keys(state), keys(table.preset()));
+  }
+});
+
+test('bucket(k) is k mod m, bucket_size(i) is the chain length', () => {
+  for (const x of [0, 7, 22, 99]) assert.match(run(table.preset(), 'bucket', { x }).frames.at(-1).msg, new RegExp(`= ${x % 5}\\.`));
+  const state = table.preset();
+  for (let i = 0; i < 5; i += 1) {
+    const { frames } = run(state, 'bucket_size', { i });
+    assert.match(frames.at(-1).msg, new RegExp(`^bucket_size\\(${i}\\) returns ${state.buckets[i].length}$`));
+  }
+  assert.match(table.ops.bucket_size.check(state, { i: 5 }), /between 0 and bucket_count\(\) - 1 \(4\)/);
+  assert.equal(table.ops.bucket_size.check(state, { i: 4 }), null);
+});
+
+test('clear empties every bucket, keeps the bucket count and works when already empty', () => {
+  const first = run(table.preset(), 'clear');
+  assert.deepEqual(keys(first.state), []);
+  assert.equal(first.state.buckets.length, 5);
+  assert.match(first.frames.at(-1).msg, /^mSize = 0/);
+  assert.equal(first.frames.length, 7);
+  const sizes = first.frames.map((frame) => frame.state.buckets.flat().length);
+  assert.deepEqual(sizes, [...sizes].sort((a, b) => b - a), 'size never grows');
+  const second = run(first.state, 'clear');
+  assert.deepEqual(keys(second.state), []);
+});
+
+test('rehash(n) rebuilds at the smallest prime >= n, reinserting keys one by one', () => {
+  const before = table.preset();
+  const { frames, state } = run(before, 'rehash', { n: 11 });
+  assert.equal(state.buckets.length, 11);
+  assert.deepEqual(sorted(keys(state)), sorted(keys(before)));
+  assertConsistent(state);
+  const msgs = frames.map((frame) => frame.msg);
+  assert.equal(msgs.filter((msg) => /^Re-insert/.test(msg)).length, 4);
+  assert.ok(frames.every((frame) => frame.state.buckets.flat().length + frame.state.tmp.length <= 4));
+  assert.match(msgs.at(-1), /^Done: bucket_count\(\) = 11/);
+  // 7 is the prime 7 >= 6; a smaller request than the load needs is raised by n/maxLoad
+  const small = run(before, 'rehash', { n: 6 });
+  assert.equal(small.frames.at(-1).state.buckets.length, 7);
+  assert.equal(nextPrime(8), 11);
+});
+
+test('rehash returns at once when the table is already big enough (course guard)', () => {
+  const { frames, state } = run(table.preset(), 'rehash', { n: 5 });
+  assert.equal(frames.length, 1);
+  assert.match(frames[0].msg, /returns at once/);
+  assert.equal(state.buckets.length, 5);
+});
+
+test('rehash on a crowded table, then clear and refill keep the invariants', () => {
+  let state = table.preset();
+  for (const x of [1, 6, 11, 16]) state = run(state, 'insert', { x }).state;
+  const ref = new Set(keys(state));
+  state = run(state, 'rehash', { n: 11 }).state;
+  assert.deepEqual(new Set(keys(state)), ref);
+  assertConsistent(state);
+  state = run(state, 'clear').state;
+  state = run(state, 'insert', { x: 3 }).state;
+  assert.deepEqual(keys(state), [3]);
+  const keyList = [];
+  for (const frame of run(table.preset(), 'rehash', { n: 11 }).frames) {
+    const k = renderBuckets(frame.state, frame.hl).match(/data-key="[^"]+"/g);
+    keyList.push(k.length - new Set(k).size);
+  }
+  assert.ok(keyList.every((dup) => dup === 0));
+});
+
+test('new ops keep one viewBox', () => {
+  const boxes = new Set();
+  for (const [op, args] of [['count', { x: 7 }], ['bucket', { x: 3 }], ['bucket_size', { i: 2 }], ['clear', {}], ['rehash', { n: 11 }]]) {
+    for (const frame of run(table.preset(), op, args).frames) boxes.add(renderBuckets(frame.state, frame.hl).match(/viewBox="([^"]+)"/)[1]);
+  }
+  assert.equal(boxes.size, 1);
 });

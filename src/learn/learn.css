@@ -162,3 +162,23 @@
 .gw-table .yes{color:var(--green);font-weight:700}
 .gw-table .no{color:var(--red)}
 @media (max-width:760px){.gw-bar-col{display:none}}
+.gw-controls [hidden]{display:none}
+.gw-howto{margin-top:10px}
+.gw-class{display:inline-flex;gap:6px;align-items:center;padding:0;border:0;background:none;color:var(--text);font:inherit;cursor:pointer;text-align:left}
+.gw-class:hover,.is-open .gw-class{color:var(--cyan)}
+.gw-row{cursor:pointer}
+.gw-row:hover td{background:var(--cyan-soft)}
+.gw-code-chip{color:var(--cyan);border:1px solid color-mix(in srgb,var(--cyan) 55%,transparent);padding:1px 6px;font-size:10px;letter-spacing:.04em}
+.is-open .gw-code-chip{background:var(--cyan);color:var(--bg)}
+.gw-example td{background:var(--bg);padding:10px 12px 14px}
+.gw-example p{margin:0 0 8px;color:var(--muted);font:13px/1.5 var(--sans)}
+.gw-example .code-block{margin:0;max-height:none}
+/* Inside the class: course member fields next to their live values */
+.internals{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,1fr);gap:14px;align-items:start;margin-top:14px}
+.internals-code{max-height:none}
+.members-panel div{display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr);gap:10px;align-items:baseline}
+.members-panel dd{overflow-wrap:anywhere;text-align:right}
+.members-panel .is-changed{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent)}
+.members-panel .is-changed dd{color:var(--amber)}
+@media (max-width:1100px){.internals{grid-template-columns:minmax(0,1fr)}}
+

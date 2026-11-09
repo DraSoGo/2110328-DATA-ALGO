@@ -4,6 +4,7 @@
 // Every string placed with innerHTML below is built from numbers and constants
 // in this file and passed through escapeHtml.
 
+import { highlightCpp } from '../../lib/cpp-highlight.js';
 import { escapeHtml } from '../../lib/html.js';
 import { t } from '../../lib/i18n.js';
 
@@ -23,17 +24,17 @@ const log10Factorial = (n) => {
 // Each class: log10 of its operation count (safe for n up to 1e18) and the exact
 // count, which is only evaluated when it is small enough to matter.
 export const CLASSES = [
-  { id: 'const', label: 'O(1)', log10: () => 0, value: () => 1 },
-  { id: 'log', label: 'O(log n)', log10: (n) => Math.log10(Math.max(1, Math.log2(n))), value: (n) => Math.max(1, Math.log2(n)) },
-  { id: 'sqrt', label: 'O(√n)', log10: (n) => 0.5 * Math.log10(n), value: (n) => Math.sqrt(n) },
-  { id: 'n', label: 'O(n)', log10: (n) => Math.log10(n), value: (n) => n },
-  { id: 'nlogn', label: 'O(n log n)', log10: (n) => Math.log10(n) + Math.log10(Math.max(1, Math.log2(n))), value: (n) => n * Math.max(1, Math.log2(n)) },
-  { id: 'nsqrtn', label: 'O(n√n)', log10: (n) => 1.5 * Math.log10(n), value: (n) => n * Math.sqrt(n) },
-  { id: 'n2', label: 'O(n²)', log10: (n) => 2 * Math.log10(n), value: (n) => n * n },
-  { id: 'n3', label: 'O(n³)', log10: (n) => 3 * Math.log10(n), value: (n) => n ** 3 },
-  { id: 'n4', label: 'O(n⁴)', log10: (n) => 4 * Math.log10(n), value: (n) => n ** 4 },
-  { id: 'exp', label: 'O(2ⁿ)', log10: (n) => n * Math.log10(2), value: (n) => 2 ** n },
-  { id: 'fact', label: 'O(n!)', log10: (n) => log10Factorial(n), value: (n) => { let p = 1; for (let k = 2; k <= n; k += 1) p *= k; return p; } },
+  { id: 'const', label: 'O(1)', log10: () => 0, value: () => 1, example: ["int get(const vector<int>& a, int i) {", "  return a[i];              // one step, however big n is", "}"] },
+  { id: 'log', label: 'O(log n)', log10: (n) => Math.log10(Math.max(1, Math.log2(n))), value: (n) => Math.max(1, Math.log2(n)), example: ["int lo = 0, hi = n;                 // search x in sorted a[0..n)", "while (hi - lo > 1) {               // the range halves every round", "  int mid = (lo + hi) / 2;", "  if (a[mid] <= x) lo = mid; else hi = mid;", "}"] },
+  { id: 'sqrt', label: 'O(√n)', log10: (n) => 0.5 * Math.log10(n), value: (n) => Math.sqrt(n), example: ["bool is_prime(long long n) {", "  for (long long d = 2; d * d <= n; d++)   // d only goes up to √n", "    if (n % d == 0) return false;", "  return n >= 2;", "}"] },
+  { id: 'n', label: 'O(n)', log10: (n) => Math.log10(n), value: (n) => n, example: ["long long sum = 0;", "for (int i = 0; i < n; i++)         // one pass over n items", "  sum += a[i];"] },
+  { id: 'nlogn', label: 'O(n log n)', log10: (n) => Math.log10(n) + Math.log10(Math.max(1, Math.log2(n))), value: (n) => n * Math.max(1, Math.log2(n)), example: ["sort(a.begin(), a.end());           // std::sort: O(n log n)", "for (int i = 0; i < n; i++)         // n times ...", "  if (binary_search(a.begin(), a.end(), q[i]))   // ... an O(log n) search", "    found++;"] },
+  { id: 'nsqrtn', label: 'O(n√n)', log10: (n) => 1.5 * Math.log10(n), value: (n) => n * Math.sqrt(n), example: ["for (int i = 1; i <= n; i++)        // n numbers", "  for (int d = 1; d * d <= i; d++)  // about √i checks each", "    if (i % d == 0) divisors++;"] },
+  { id: 'n2', label: 'O(n²)', log10: (n) => 2 * Math.log10(n), value: (n) => n * n, example: ["for (int i = 0; i < n; i++)", "  for (int j = i + 1; j < n; j++)   // every pair (i, j)", "    if (a[i] + a[j] == k) count++;"] },
+  { id: 'n3', label: 'O(n³)', log10: (n) => 3 * Math.log10(n), value: (n) => n ** 3, example: ["for (int k = 0; k < n; k++)         // Floyd–Warshall", "  for (int i = 0; i < n; i++)", "    for (int j = 0; j < n; j++)", "      d[i][j] = min(d[i][j], d[i][k] + d[k][j]);"] },
+  { id: 'n4', label: 'O(n⁴)', log10: (n) => 4 * Math.log10(n), value: (n) => n ** 4, example: ["for (int a = 0; a < n; a++)", "  for (int b = 0; b < n; b++)", "    for (int c = 0; c < n; c++)", "      for (int d = 0; d < n; d++)   // every 4-tuple", "        if (w[a] + w[b] + w[c] + w[d] == k) count++;"] },
+  { id: 'exp', label: 'O(2ⁿ)', log10: (n) => n * Math.log10(2), value: (n) => 2 ** n, example: ["void subsets(int i) {               // each call branches in two", "  if (i == n) { count++; return; }", "  subsets(i + 1);                   // skip a[i]", "  subsets(i + 1);                   // take a[i]", "}"] },
+  { id: 'fact', label: 'O(n!)', log10: (n) => log10Factorial(n), value: (n) => { let p = 1; for (let k = 2; k <= n; k += 1) p *= k; return p; }, example: ["sort(p.begin(), p.end());", "do {                                // n! orderings", "  check(p);", "} while (next_permutation(p.begin(), p.end()));"] },
 ];
 
 // From the competitive-programming rule-of-thumb table.
@@ -122,7 +123,7 @@ export function findN0(predicate, max, step = 0.25) {
 
 const W = 640;
 const H = 340;
-const PAD = { left: 52, right: 96, top: 16, bottom: 34 };
+const PAD = { left: 52, right: 150, top: 16, bottom: 34 };
 const sx = (n, xMax) => PAD.left + ((n - 1) / (xMax - 1)) * (W - PAD.left - PAD.right);
 const sy = (v, yMax) => H - PAD.bottom - (v / yMax) * (H - PAD.top - PAD.bottom);
 
@@ -235,7 +236,7 @@ function layoutMarkup() {
   const defs = ['O', 'Omega', 'Theta'].map((mode) => `<div><dt>${MODE_SIGN[mode]}(g)</dt><dd><b>${escapeHtml(t(`gw.word.${mode}`))}</b>: ${escapeHtml(t(`gw.rule.${mode}`))}</dd></div>`).join('');
   return `<section class="gw-section">
     <h2>${escapeHtml(t('gw.h.ops'))}</h2>
-    <p class="gw-hint">${escapeHtml(t('gw.hint.ops'))}</p>
+    <p class="gw-hint">${escapeHtml(t('gw.hint.ops'))} ${escapeHtml(t('gw.hint.example'))}</p>
     <div class="gw-n">
       <label>n <input type="range" min="0" max="1800" step="1" data-gw="slider" aria-label="n (log scale)"></label>
       <input type="number" min="1" max="1e18" data-gw="n" aria-label="n">
@@ -265,20 +266,23 @@ function layoutMarkup() {
       <label>${escapeHtml(t('gw.nUpTo'))} <input type="range" min="10" max="200" step="5" value="60" data-gw="xmax"> <b data-gw="xmax-out">60</b></label>
     </div>
     <div class="gw-plot" data-gw="bounds"></div>
+    <p class="gw-hint gw-howto">${escapeHtml(t('gw.howto'))}</p>
     <p class="gw-verdict" data-gw="verdict" role="status"></p>
     <div class="gw-table" data-gw="membership"></div>
   </section>`;
 }
 
-function opsMarkup(n) {
+function opsMarkup(n, open) {
   const badges = { ok: 'OK', borderline: t('gw.borderline'), tle: 'TLE' };
   const rows = CLASSES.map((cls) => {
     const result = estimate(cls, n);
     const log = Math.min(cls.log10(n), 20);
     const ops = result.ops === null ? t('gw.notComputed') : formatCount(result.ops);
     const time = result.seconds === null ? '—' : formatSeconds(result.seconds);
-    return `<tr class="is-${result.status}"><td>${escapeHtml(cls.label)}</td><td>${escapeHtml(ops)}</td><td>${escapeHtml(time)}</td><td><span class="gw-badge ${result.status}">${escapeHtml(badges[result.status])}</span></td>`
-      + `<td class="gw-bar-col"><span class="gw-bar"><i style="width:${Math.max(1, (log / 20) * 100).toFixed(1)}%"></i><em style="left:${(LIMIT_LOG / 20) * 100}%"></em></span></td></tr>`;
+    const isOpen = open === cls.id;
+    const example = isOpen ? `<tr class="gw-example"><td colspan="5"><p>${escapeHtml(t(`gw.ex.${cls.id}`))}</p><pre class="code-block" translate="no"><code class="language-cpp">${cls.example.map((line) => highlightCpp(line)).join('\n')}</code></pre></td></tr>` : '';
+    return `<tr class="gw-row is-${result.status}${isOpen ? ' is-open' : ''}" data-gw-row="${cls.id}"><td><button type="button" class="gw-class" data-gw-class="${cls.id}" aria-expanded="${isOpen}">${escapeHtml(cls.label)} <span class="gw-code-chip" aria-hidden="true">${isOpen ? '▾' : '▸'} code</span></button></td><td>${escapeHtml(ops)}</td><td>${escapeHtml(time)}</td><td><span class="gw-badge ${result.status}">${escapeHtml(badges[result.status])}</span></td>`
+      + `<td class="gw-bar-col"><span class="gw-bar"><i style="width:${Math.max(1, (log / 20) * 100).toFixed(1)}%"></i><em style="left:${(LIMIT_LOG / 20) * 100}%"></em></span></td></tr>${example}`;
   }).join('');
   return `<table><thead><tr><th>${escapeHtml(t('gw.col.class'))}</th><th>${escapeHtml(t('gw.col.ops', { n: formatCount(n) }))}</th><th>${escapeHtml(t('gw.col.time'))}</th><th></th><th class="gw-bar-col">${escapeHtml(t('gw.col.bar'))}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
@@ -299,7 +303,7 @@ function membershipMarkup(f) {
 function mount(host) {
   host.innerHTML = layoutMarkup();
   const el = (name) => host.querySelector(`[data-gw="${name}"]`);
-  const state = { n: 1000, view: 10, shown: new Set(GROWTH.filter((item) => item.id !== 'fact').map((item) => item.id)), f: 'lin10', g: 'n12', mode: 'O', c1: 0.5, c2: 2, xMax: 60 };
+  const state = { open: null, n: 1000, view: 10, shown: new Set(GROWTH.filter((item) => item.id !== 'fact').map((item) => item.id)), f: 'lin10', g: 'n12', mode: 'O', c1: 0.5, c2: 2, xMax: 60 };
 
   const renderGrowth = () => {
     el('view-out').textContent = String(state.view);
@@ -308,7 +312,7 @@ function mount(host) {
   const renderN = () => {
     el('slider').value = String(sliderFromN(state.n));
     el('n').value = String(state.n);
-    el('ops').innerHTML = opsMarkup(state.n);
+    el('ops').innerHTML = opsMarkup(state.n, state.open);
     el('feasible').innerHTML = feasibleMarkup(state.n);
     renderGrowth();
   };
@@ -328,6 +332,13 @@ function mount(host) {
     el('membership').innerHTML = membershipMarkup(f);
   };
 
+  el('ops').addEventListener('click', (event) => {
+    // The whole row toggles its example; the button inside keeps keyboard access.
+    const row = event.target.closest('[data-gw-row]');
+    if (!row) return;
+    state.open = state.open === row.dataset.gwRow ? null : row.dataset.gwRow;
+    el('ops').innerHTML = opsMarkup(state.n, state.open);
+  });
   el('slider').addEventListener('input', (event) => { state.n = nFromSlider(event.target.value); renderN(); });
   el('n').addEventListener('change', (event) => {
     const value = Math.round(Number(event.target.value));

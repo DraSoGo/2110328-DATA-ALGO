@@ -1,3 +1,4 @@
+import { clearTree, walkBound, walkExtreme } from './bst.js';
 // AVL tree in the style of the course CP::map_avl (keys only).
 // Every node stores its height h (an empty tree has height -1); the badge shows
 // balance_value() = height(right) - height(left) as it was stored the last time the node was updated,
@@ -272,6 +273,42 @@ export default {
         setPointers(state, found ? cur : null);
         if (!found) yield { line: 0, msg: `Reached an empty link: ${x} is not in the tree, find returns end()`, state, hl: {} };
         else yield { line: 0, msg: `find(${x}) returns an iterator to this node; find never changes heights or rotates`, state, hl: { done: [cur] } };
+      },
+    },
+    begin: {
+      params: [],
+      time: 'O(log n)',
+      code: 't.begin();',
+      check: () => null,
+      *run(state) {
+        yield* walkExtreme(state, 'left', setPointers);
+      },
+    },
+    find_max: {
+      params: [],
+      time: 'O(log n)',
+      code: 't.find_max_node(t.mRoot);',
+      check: () => null,
+      *run(state) {
+        yield* walkExtreme(state, 'right', setPointers);
+      },
+    },
+    lower_bound: {
+      params: [{ ...valueParam, default: 45 }],
+      time: 'O(log n)',
+      code: 't.lower_bound({x});',
+      check: () => null,
+      *run(state, { x }) {
+        yield* walkBound(state, x, false, setPointers);
+      },
+    },
+    clear: {
+      params: [],
+      time: 'O(n)',
+      code: 't.clear();',
+      check: () => null,
+      *run(state) {
+        yield* clearTree(state, setPointers);
       },
     },
   },

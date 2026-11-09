@@ -7,6 +7,7 @@ import { createPlayer, SPEEDS } from './engine/player.js';
 import { record } from './engine/recorder.js';
 import { findModule, modulesFor } from './modules.js';
 import { RENDERERS } from './render/index.js';
+import { internalsFor } from './internals.js';
 import { slidePath, slidesFor } from './slides.js';
 
 let session = null;
@@ -74,6 +75,26 @@ function complexityMarkup(module) {
   return `<section class="complexity" aria-label="Big O complexity"><p class="complexity-title">${escapeHtml(t(module.side === 'data' ? 'learn.bigO.data' : 'learn.bigO.algo'))}</p><dl>${rows}</dl>${module.complexity.note ? `<p class="complexity-note">${escapeHtml(module.complexity.note)}</p>` : ''}</section>`;
 }
 
+function internalsMarkup(module) {
+  const info = internalsFor(module);
+  if (!info) return '';
+  const name = info.className.split(/[<\s]/)[0].split('::').pop();
+  const skeleton = [`class ${name} {   // ${info.className}`, '  protected:', ...info.fields.map((line) => `    ${line}`), '};'];
+  return `<div class="internals">
+      <pre class="code-block internals-code" translate="no"><code class="language-cpp">${skeleton.map((line) => `<span class="code-line">${highlightCpp(line)}</span>`).join('')}</code></pre>
+      <aside class="vars-box internals-box" aria-label="${escapeHtml(t('learn.members'))}"><p class="vars-title">${escapeHtml(t('learn.members'))} · <span translate="no">${escapeHtml(info.className)}</span></p><dl class="vars-panel members-panel" translate="no"></dl></aside>
+    </div>`;
+}
+
+// Members rows, marking the ones whose value differs from the previous frame.
+function membersMarkup(info, state, previous) {
+  const before = new Map((previous ? info.members(previous) : []).map((row) => [row.name, row.value]));
+  return info.members(state).map((row) => {
+    const changed = previous && before.get(row.name) !== row.value;
+    return `<div class="${changed ? 'is-changed' : ''}"><dt>${escapeHtml(row.name)}</dt><dd>${escapeHtml(row.value)}</dd></div>`;
+  }).join('');
+}
+
 function dataStageMarkup(module) {
   const ops = Object.keys(module.ops);
   return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(moduleSummary(module))}</p>${slidesMarkup(module)}</header>
@@ -86,6 +107,7 @@ function dataStageMarkup(module) {
     </div>
     <div class="viz-host"></div>
     <p class="step-msg" aria-live="polite"></p>
+    ${internalsMarkup(module)}
     ${playerMarkup()}
     <p class="history"><span>${escapeHtml(t('learn.history'))}</span><code class="history-list" translate="no"></code></p>`;
 }
@@ -293,6 +315,7 @@ export function mountLearn(route, root) {
   const current = { player: null, cleanup: [] };
   session = current;
   const render = RENDERERS[module.renderer];
+  const internals = internalsFor(module);
   const ui = {
     viz: root.querySelector('.viz-host'),
     msg: root.querySelector('.step-msg'),
@@ -302,7 +325,8 @@ export function mountLearn(route, root) {
     play: root.querySelector('.player-play'),
     speed: root.querySelector('.player-speed select'),
     lines: [...root.querySelectorAll('.code-line[data-line]')],
-    vars: root.querySelector('.vars-panel'),
+    vars: root.querySelector('.vars-panel:not(.members-panel)'),
+    members: root.querySelector('.members-panel'),
   };
 
   const show = ({ frame, index, total, playing, speed, animate }) => {
@@ -322,9 +346,11 @@ export function mountLearn(route, root) {
     ui.play.setAttribute('aria-label', t(playing ? 'player.pause' : 'player.play'));
     ui.lines.forEach((line) => line.classList.toggle('is-current', Number(line.dataset.line) === frame.line));
     if (ui.vars) ui.vars.innerHTML = varsMarkup(frame.vars);
+    if (ui.members && internals) ui.members.innerHTML = membersMarkup(internals, frame.state, index > 0 ? current.frames[index - 1].state : null);
   };
 
   const load = (frames, autoplay) => {
+    current.frames = frames;
     current.player?.destroy();
     current.player = createPlayer({ frames, onChange: show });
     current.player.setSpeed(Number(ui.speed.value));
