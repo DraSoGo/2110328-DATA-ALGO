@@ -109,9 +109,9 @@ namespace CP
                 std::cout << mData[i] << " ";
             }
             std::cout << "\n";
-        }
+        } void mitosis(int a, int b);
 
-        void mitosis(int a, int b);
+       
     };
 
 }

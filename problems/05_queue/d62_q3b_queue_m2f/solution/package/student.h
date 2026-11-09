@@ -5,8 +5,14 @@
 #include <iostream>
 
 template <typename T>
-void CP::queue<T>::move_to_front(size_t pos) {
-    //your code here
+void CP::queue<T>::move_to_front(size_t pos)
+{
+    auto tmp = mData[(pos+mFront)%mCap];
+    for (size_t i = pos; i > 0; i--)
+    {
+        mData[(mFront+i)%mCap] = mData[(mFront+i-1)%mCap];
+    }
+    mData[mFront] = tmp;
 }
 
 #endif

@@ -2,17 +2,20 @@
 #include "student.h"
 #include <iostream>
 
-int main() {
+int main()
+{
   CP::queue<int> q;
   int n;
   std::cin >> n;
-  for (int i = 0; i < n; ++i) {
+  for (int i = 0; i < n; ++i)
+  {
     int element;
     std::cin >> element;
     q.push(element);
   }
   q.reverse();
-  while (!q.empty()) {
+  while (!q.empty())
+  {
     std::cout << q.front() << " ";
     q.pop();
   }
