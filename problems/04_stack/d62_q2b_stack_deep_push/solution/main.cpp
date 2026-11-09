@@ -6,26 +6,33 @@
 
 using namespace std;
 
-
-
-int main() {
+int main()
+{
   CP::stack<int> s;
   char c;
   scanf("%c", &c);
-  while (c != 'q') {
-    if (c == 'u') {
+  while (c != 'q')
+  {
+    if (c == 'u')
+    {
       // add data
       int v;
       scanf("%d", &v);
       s.push(v);
-    } else if (c == 'o') {
-       s.pop();
-    } else if (c == 'p') {
+    }
+    else if (c == 'o')
+    {
+      s.pop();
+    }
+    else if (c == 'p')
+    {
       s.print();
-    } else if (c == 'd') {
-      int p,v;
+    }
+    else if (c == 'd')
+    {
+      int p, v;
       scanf("%d %d", &p, &v);
-      s.deep_push(p,v);
+      s.deep_push(p, v);
     }
     scanf("%c", &c);
   }
