@@ -8,6 +8,7 @@ import { getLang, initLang, plural, setLang, t } from './lib/i18n.js';
 import { modulesFor } from './learn/modules.js';
 import { slidePath, SLIDES } from './learn/slides.js';
 import { learnPageMarkup, mountLearn, unmountLearn } from './learn/view.js';
+import { findHeader } from './learn/code/index.js';
 import { courseWeeks, currentWeek, SESSION_LABEL, weekRangeLabel } from './lib/schedule.js';
 import { formatBytes, loadTestcasePair } from './lib/testcase-viewer.js';
 import { showTemporaryButtonStatus } from './lib/ui.js';
@@ -52,6 +53,8 @@ function statusDots(problem) {
   return `<span class="status-dots" title="${escapeHtml(summary)}" aria-label="${escapeHtml(summary)}">${items.map((item) => `<i class="${item.ready ? 'ready' : ''}"></i>`).join('')}</span>`;
 }
 
+const sideCount = (side) => modulesFor(side).length;
+
 function learnNavMarkup(route) {
   const open = categoryIsOpen({
     category: 'learn', activeCategory: route.page === 'learn' ? 'learn' : null, query: '',
@@ -63,7 +66,7 @@ function learnNavMarkup(route) {
       ${icon('chevron')}<span class="tree-code">LRN</span><strong>${escapeHtml(t('nav.learning'))}</strong><span class="tree-count">${sides.length}</span>
     </button>
     <div ${open ? '' : 'hidden'}>${sides.map((side) => `<a class="learn-link${route.page === 'learn' && route.side === side.id ? ' active' : ''}" href="#/learn/${side.id}">
-      <span>${side.code}</span><strong>${side.title}</strong><small>${modulesFor(side.id).length}</small>
+      <span>${side.code}</span><strong>${side.title}</strong><small>${sideCount(side.id)}</small>
     </a>`).join('')}</div>
   </section>`;
 }
@@ -195,7 +198,7 @@ function learnMarkup(route) {
     <div class="terminal-label"><span>~/cedt/data_algo/learn</span><span>learn.exe</span></div>
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#/learn">${escapeHtml(t('crumb.learn'))}</a></nav>
     <h1 class="learn-title">${escapeHtml(t('learn.title'))}</h1>
-    <div class="learn-sides">${sides.map((side) => `<a class="learn-side" href="#/learn/${side.id}"><span>${side.index}</span><strong>${escapeHtml(side.title)}</strong><p>${escapeHtml(side.copy)}</p><small>${escapeHtml(t('learn.modules', { count: modulesFor(side.id).length, s: plural(modulesFor(side.id).length).toUpperCase() }))}</small></a>`).join('')}</div>
+    <div class="learn-sides">${sides.map((side) => `<a class="learn-side" href="#/learn/${side.id}"><span>${side.index}</span><strong>${escapeHtml(side.title)}</strong><p>${escapeHtml(side.copy)}</p><small>${escapeHtml(t('learn.modules', { count: sideCount(side.id), s: plural(sideCount(side.id)).toUpperCase() }))}</small></a>`).join('')}</div>
     <section class="slide-index" aria-labelledby="slide-index-title">
       <h2 id="slide-index-title">${escapeHtml(t('learn.slides'))}</h2>
       ${[['data', t('learn.slides.data')], ['algo', t('learn.slides.algo')]].map(([side, title]) => `<div><h3>${escapeHtml(title)}</h3><ul>${SLIDES.filter((slide) => slide.side === side).map((slide) => `<li><a href="${escapeHtml(asset(slidePath(slide)))}" target="_blank" rel="noopener"><span>${escapeHtml(slide.title)}</span><small>${escapeHtml(slide.file)}</small></a></li>`).join('')}</ul></div>`).join('')}
@@ -391,6 +394,11 @@ function renderRoute() {
   // In-page anchors such as the skip link (#main) are not routes.
   if (location.hash && !location.hash.startsWith('#/')) return;
   const route = pageRoute(location.hash);
+  if (route.page === 'learn' && route.side === 'code') {
+    const header = route.module ? findHeader(route.module) : null;
+    location.replace(header ? `#/learn/data/${header.module}/code` : '#/learn/data');
+    return;
+  }
   const problem = activeProblem();
   const main = document.querySelector('#main');
   // Keep the Learning module list where it was when moving between modules.
@@ -413,7 +421,9 @@ function renderRoute() {
     main.innerHTML = overviewMarkup();
   }
   bindView(problem);
-  if (route.page === 'learn' && route.side) mountLearn(route, main);
+  if (route.page === 'learn' && route.side) {
+    mountLearn(route, main, { problemHref: (name) => { const found = state.problems.find((item) => item.name === name); return found ? problemHref(found) : null; } });
+  }
   updateSidebar();
   main.scrollTo(0, 0);
   const list = document.querySelector('.module-list');

@@ -3,7 +3,7 @@ import { parseCourseDate, sessionKind } from './schedule.js';
 const SESSION_ORDER = { afternoon: 0, homework: 1 };
 
 export function pageRoute(hash = '') {
-  const base = { page: 'overview', problemId: null, side: null, module: null, week: null };
+  const base = { page: 'overview', problemId: null, side: null, module: null, week: null, view: null };
   try {
     if (hash.startsWith('#/p/') && hash.length > 4) return { ...base, page: 'problem', problemId: decodeURIComponent(hash.slice(4)) };
   } catch {
@@ -11,8 +11,8 @@ export function pageRoute(hash = '') {
   }
   const week = hash.match(/^#\/week(?:\/(\d+))?$/);
   if (week) return { ...base, page: 'week', week: week[1] ? Number(week[1]) : null };
-  const learn = hash.match(/^#\/learn(?:\/(data|algo)(?:\/([\w-]+))?)?\/?$/);
-  if (learn) return { ...base, page: 'learn', side: learn[1] || null, module: learn[2] || null };
+  const learn = hash.match(/^#\/learn(?:\/(data|algo|code)(?:\/([\w-]+)(?:\/(code))?)?)?\/?$/);
+  if (learn) return { ...base, page: 'learn', side: learn[1] || null, module: learn[2] || null, view: learn[3] || null };
   return base;
 }
 

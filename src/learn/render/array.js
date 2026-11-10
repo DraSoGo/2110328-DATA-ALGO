@@ -30,7 +30,9 @@ export function renderArray(state, hl = {}) {
   const rowHeight = bars ? BAR_MAX : CELL;
   const itemHeight = (value) => (bars ? BAR_MIN + Math.round((((Number(value) || 0) - low) / (high - low)) * (BAR_MAX - BAR_MIN)) : CELL);
   const lane = 'lifted' in state ? rowHeight + PAD : 0;
-  const rowTop = PAD + lane;
+  const BRACKET_SPACE = 30;
+  const brackets = (state.brackets || []).filter((item) => item.to >= item.from);
+  const rowTop = PAD + lane + (state.brackets ? BRACKET_SPACE : 0);
   const baseline = rowTop + rowHeight;
 
   const stack = new Map();
@@ -61,6 +63,13 @@ export function renderArray(state, hl = {}) {
     : '';
   const pointerMarkup = pointers.map(({ name, index, row }) => `<g class="pointer" data-key="ptr-${escapeHtml(name)}" style="transform:translate(${index < 0 ? GUTTER / 2 : x(index) + width / 2}px,${baseline + LABEL_SPACE + row * POINTER_ROW}px)"><text text-anchor="middle" y="11">↑${escapeHtml(name)}</text></g>`).join('');
 
+  // A labelled bracket over slots from..to (used by the Code tab to point at mSize, mCap ...).
+  const bracketMarkup = brackets.map(({ from, to, label: text }) => {
+    const x1 = x(from);
+    const x2 = x(to) + width;
+    const y = rowTop - 8;
+    return `<g class="bracket"><path d="M${x1},${y + 6}V${y}H${x2}V${y + 6}"/><text x="${(x1 + x2) / 2}" y="${y - 6}" text-anchor="middle">${escapeHtml(text)}</text></g>`;
+  }).join('');
   const label = `Array of ${cells.length}: ${cells.map((cell) => (cell ? cell.value : '_')).join(', ')}`;
-  return `<svg class="viz viz-array${bars ? ' is-bars' : ''}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgWidth} ${svgHeight}" role="img" aria-label="${escapeHtml(label)}"><g class="layer-static">${slotMarkup}${labelMarkup}</g><g class="layer-items">${itemMarkup}${liftedMarkup}${pointerMarkup}</g></svg>`;
+  return `<svg class="viz viz-array${bars ? ' is-bars' : ''}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgWidth} ${svgHeight}" role="img" aria-label="${escapeHtml(label)}"><g class="layer-static">${bracketMarkup}${slotMarkup}${labelMarkup}</g><g class="layer-items">${itemMarkup}${liftedMarkup}${pointerMarkup}</g></svg>`;
 }

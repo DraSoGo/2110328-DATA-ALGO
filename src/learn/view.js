@@ -7,13 +7,18 @@ import { createPlayer, SPEEDS } from './engine/player.js';
 import { record } from './engine/recorder.js';
 import { findModule, modulesFor } from './modules.js';
 import { RENDERERS } from './render/index.js';
+import { headerForModule, loadAnnotations } from './code/index.js';
+import { codeIndexMarkup, mountHeader, unmountCode } from './code/view.js';
 import { internalsFor } from './internals.js';
 import { slidePath, slidesFor } from './slides.js';
 
 let session = null;
+// Hand-off between the Animation and Code tabs of a Data module across a route change.
+const pending = { op: null, codeOp: null };
 const MAX_SCALE = 1.6;
 
 export function unmountLearn() {
+  unmountCode();
   if (!session) return;
   session.player?.destroy();
   session.cleanup.forEach((fn) => fn());
@@ -95,14 +100,29 @@ function membersMarkup(info, state, previous) {
   }).join('');
 }
 
-function dataStageMarkup(module) {
+function tabsMarkup(module, header, view) {
+  if (!header) return '';
+  const tab = (href, on, label) => `<a class="learn-tab${on ? ' is-on' : ''}" href="${href}"${on ? ' aria-current="page"' : ''}>${label}</a>`;
+  return `<nav class="learn-tabs" aria-label="${escapeHtml(module.title)}">
+      ${tab(`#/learn/data/${escapeHtml(module.id)}`, view !== 'code', `▶ ${escapeHtml(t('learn.tab.visual'))}`)}
+      ${tab(`#/learn/data/${escapeHtml(module.id)}/code`, view === 'code', `{ } ${escapeHtml(t('learn.tab.code'))} <code translate="no">${escapeHtml(header.file)}</code>`)}
+    </nav>`;
+}
+
+function dataStageMarkup(module, view) {
   const ops = Object.keys(module.ops);
-  return `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(moduleSummary(module))}</p>${slidesMarkup(module)}</header>
+  const header = headerForModule(module.id);
+  const head = `<header class="stage-head"><h1>${escapeHtml(module.title)}</h1><p>${escapeHtml(moduleSummary(module))}</p>${slidesMarkup(module)}</header>
+    ${tabsMarkup(module, header, view)}`;
+  if (header && view === 'code') {
+    return `${head}<div class="code-page" data-code-page="${escapeHtml(header.id)}"><div class="inline-loader"><span></span>${escapeHtml(t('code.loading'))}</div></div>`;
+  }
+  return `${head}
     ${complexityMarkup(module)}
     <div class="op-bar" role="toolbar" aria-label="Operations">${ops.map((name, index) => `<button type="button" data-op="${escapeHtml(name)}" aria-pressed="${index === 0}">${escapeHtml(name)}<small>${escapeHtml(module.ops[name].time)}</small></button>`).join('')}</div>
     <div class="code-panel data-code">
       <pre class="code-block" translate="no"><code class="language-cpp"><span class="code-line muted">${highlightCpp(module.declare)}</span><span class="code-line op-line" data-line="0"></span></code></pre>
-      <div class="op-actions"><button type="button" class="run-button" data-action="run">${escapeHtml(t('learn.run'))}</button><button type="button" data-action="reset">${escapeHtml(t('learn.reset'))}</button></div>
+      <div class="op-actions"><button type="button" class="run-button" data-action="run">${escapeHtml(t('learn.run'))}</button><button type="button" data-action="reset">${escapeHtml(t('learn.reset'))}</button>${header ? `<a class="op-code-link" href="#/learn/data/${escapeHtml(module.id)}/code" hidden></a>` : ''}</div>
       <p class="op-error" role="alert"></p>
     </div>
     <div class="viz-host"></div>
@@ -161,10 +181,11 @@ export function learnPageMarkup(route) {
     .map((item) => `<a class="module-link${item === module ? ' active' : ''}" href="#/learn/${route.side}/${escapeHtml(item.id)}"><span>${escapeHtml(item.title)}</span><small>${escapeHtml(complexitySummary(item))}</small></a>`)
     .join('')}`).join('');
   let stage;
-  if (!route.module) stage = stageMessage(t('learn.pick.title'), t(route.side === 'data' ? 'learn.pick.data' : 'learn.pick.algo'));
+  if (!route.module && route.side === 'data') stage = `${stageMessage(t('learn.pick.title'), t('learn.pick.data'))}${codeIndexMarkup()}`;
+  else if (!route.module) stage = stageMessage(t('learn.pick.title'), t('learn.pick.algo'));
   else if (!module) stage = stageMessage(t('learn.missing.title'), t('learn.missing.text'));
   else if (module.widget) stage = widgetStageMarkup(module);
-  else stage = module.side === 'data' ? dataStageMarkup(module) : algoStageMarkup(module);
+  else stage = module.side === 'data' ? dataStageMarkup(module, route.view) : algoStageMarkup(module);
   return `<div class="learn-view view-enter">
     <div class="terminal-label"><span>~/cedt/data_algo/learn/${route.side}</span><span>${escapeHtml(module ? module.id : route.side)}.exe</span></div>
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#/learn">${escapeHtml(t('crumb.learn'))}</a><span>/</span><a href="#/learn/${route.side}">${escapeHtml(t(route.side === 'data' ? 'nav.data' : 'nav.algo').toUpperCase())}</a>${module ? `<span>/</span><strong>${escapeHtml(module.title.toUpperCase())}</strong>` : ''}</nav>
@@ -190,7 +211,23 @@ export function callLabel(template, args) {
 
 function mountData(module, root, ui, load) {
   let state = module.preset();
-  let opName = Object.keys(module.ops)[0];
+  let opName = pending.op && pending.op in module.ops ? pending.op : Object.keys(module.ops)[0];
+  pending.op = null;
+  const header = headerForModule(module.id);
+  const codeLink = root.querySelector('.op-code-link');
+  let opsWithCode = new Set();
+  const syncCodeLink = () => {
+    if (!codeLink) return;
+    codeLink.hidden = !opsWithCode.has(opName);
+    codeLink.textContent = `{ } ${t('learn.readCode', { op: opName, file: header.file })}`;
+  };
+  if (header && codeLink) {
+    loadAnnotations(header.id).then((data) => {
+      opsWithCode = new Set(data.regions.filter((region) => region.op).map((region) => region.op));
+      syncCodeLink();
+    }).catch(() => {});
+    codeLink.addEventListener('click', () => { pending.codeOp = opName; });
+  }
   const values = {};
   const history = [];
   const opLine = root.querySelector('.op-line');
@@ -200,6 +237,7 @@ function mountData(module, root, ui, load) {
     opLine.innerHTML = opLineMarkup(module.ops[opName], values);
     root.querySelectorAll('[data-op]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.op === opName)));
     ui.error.textContent = '';
+    syncCodeLink();
   };
   const idle = (msg) => load([{ line: null, msg, state: structuredClone(state), hl: {}, vars: null }], false);
 
@@ -301,10 +339,20 @@ function mountAlgo(module, root, ui, load) {
   run(false);
 }
 
-export function mountLearn(route, root) {
+export function mountLearn(route, root, { problemHref } = {}) {
   unmountLearn();
   const module = route.module ? findModule(route.side, route.module) : null;
   if (!module) return;
+  const header = module.side === 'data' ? headerForModule(module.id) : null;
+  if (header && route.view === 'code') {
+    const focusOp = pending.codeOp;
+    pending.codeOp = null;
+    mountHeader(root.querySelector('[data-code-page]'), header, {
+      problemHref,
+      focusOp,
+    });
+    return;
+  }
   if (module.widget) {
     const current = { player: null, cleanup: [] };
     session = current;

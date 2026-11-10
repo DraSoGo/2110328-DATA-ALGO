@@ -3887,7 +3887,12 @@
       }
     ],
     "statement": "problems/06_priority queue/d62_q1a_vote/statement.pdf",
-    "solution": [],
+    "solution": [
+      {
+        "name": "solution.cpp",
+        "path": "problems/06_priority queue/d62_q1a_vote/solution.cpp"
+      }
+    ],
     "testcases": [
       {
         "id": "01",

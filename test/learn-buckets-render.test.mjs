@@ -74,3 +74,17 @@ test('values and keys are escaped', () => {
   assert.equal(svg.includes('k"><x'), false);
   assert.ok(NODE_W > 0 && NODE_H > 0);
 });
+
+test('pointers: bucket index, node key and chain position, sharing a label when they coincide', () => {
+  const svg = renderBuckets(sample({ pointers: { bkt: 0, val: 'b', end: { bucket: 2, at: 1 }, tmp: 'b', gone: null, lost: 'nope' } }));
+  assert.equal(count(svg, /class="pointer"/g), 3);
+  assert.match(svg, />bkt</);
+  assert.match(svg, />↑val,tmp</);
+  assert.match(svg, />↑end</);
+  assert.equal(svg.includes('gone'), false);
+  assert.equal(svg.includes('lost'), false);
+  const keys = [...svg.matchAll(/data-key="([^"]+)"/g)].map((m) => m[1]);
+  assert.equal(new Set(keys).size, keys.length);
+  assert.equal(count(renderBuckets(sample()), /class="pointer"/g), 0);
+  assert.equal(box(svg), box(renderBuckets(sample())));
+});

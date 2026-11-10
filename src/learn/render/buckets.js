@@ -24,6 +24,10 @@ const num = (value) => Math.round(value * 10) / 10;
 // Bucket i is row i. Its chain is drawn to the right, first node nearest the bucket.
 // `capacity` (bucket rows) and `maxChain` (nodes per row) fix the viewBox.
 // `tmp` is the holding row above the buckets that rehash copies values into.
+// Optional `pointers: { name: where }` draws iterator-style labels. `where` is a bucket row index
+// (the name sits inside that bucket's slot; an index past the last bucket marks end()), a node key
+// (the name sits under that node), or { bucket, at } for position `at` in the chain of `bucket`
+// (at = chain length is the end of the chain). Names that land in the same place share one label.
 export function renderBuckets(state, hl = {}) {
   const buckets = state.buckets || [];
   const tmp = state.tmp || [];
@@ -65,9 +69,29 @@ export function renderBuckets(state, hl = {}) {
     : '';
   const defs = '<defs><marker id="buckets-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z"/></marker></defs>';
 
+  const spot = (where) => {
+    if (typeof where === 'number') return { x: LEFT + BUCKET_W / 2, y: midY(rowY(where)) + 4, text: '' };
+    const under = (bucket, at) => ({ x: nodeX(at) + NODE_W / 2, y: rowY(bucket) + (ROW + NODE_H) / 2 + 9, text: '↑' });
+    if (where && typeof where === 'object') return under(where.bucket, where.at);
+    for (let i = 0; i < buckets.length; i += 1) {
+      const j = buckets[i].findIndex((cell) => cell.key === where);
+      if (j >= 0) return under(i, j);
+    }
+    return null;
+  };
+  const groups = new Map();
+  for (const [name, where] of Object.entries(state.pointers || {})) {
+    const at = where == null ? null : spot(where);
+    if (!at) continue;
+    const id = `${at.x},${at.y}`;
+    groups.set(id, { ...at, names: [...(groups.get(id)?.names || []), name] });
+  }
+  const pointerMarkup = [...groups.values()].map(({ x, y, text, names }) => `<g class="pointer" data-key="ptr-${escapeHtml(names.join('+'))}" style="transform:translate(${num(x)}px,${num(y)}px)"><text text-anchor="middle" style="font-size:10px">${text}${escapeHtml(names.join(','))}</text></g>`).join('');
+
   const node = (cell, x, y) => `<g class="${['item', ...classesFor(cell.key, hl)].join(' ')}" data-key="${escapeHtml(cell.key)}" style="transform:translate(${num(x)}px,${num(y)}px)"><rect width="${NODE_W}" height="${NODE_H}" rx="6"/><text x="${NODE_W / 2}" y="${NODE_H / 2 + 5}" text-anchor="middle">${escapeHtml(cell.value)}</text></g>`;
   const itemMarkup = buckets.map((cells, i) => cells.map((cell, j) => node(cell, nodeX(j), rowY(i) + (ROW - NODE_H) / 2)).join('')).join('')
-    + tmp.map((cell, j) => node(cell, nodeX(j), PAD + (ROW - NODE_H) / 2)).join('');
+    + tmp.map((cell, j) => node(cell, nodeX(j), PAD + (ROW - NODE_H) / 2)).join('')
+    + pointerMarkup;
 
   const label = `Hash table with ${buckets.length} buckets and ${total} keys: ${buckets.map((b, i) => `${i}: ${b.map((c) => c.value).join(' ') || 'empty'}`).join('; ')}`;
   return `<svg class="viz viz-buckets" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgWidth} ${svgHeight}" role="img" aria-label="${escapeHtml(label)}"><g class="layer-static">${defs}${slotMarkup}${edgeMarkup}${info}</g><g class="layer-items">${itemMarkup}</g></svg>`;

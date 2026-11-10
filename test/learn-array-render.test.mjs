@@ -82,3 +82,12 @@ test('every declared pointer name reserves a row', () => {
   const box = (svg) => svg.match(/viewBox="([^"]+)"/)[1];
   assert.equal(box(renderArray({ cells: cells(1, 2), pointers: { i: null, j: null } })), box(renderArray({ cells: cells(1, 2), pointers: { i: 0, j: 0 } })));
 });
+
+test('brackets label a slot range above the row and push the row down', () => {
+  const plain = renderArray({ cells: cells(1, 2, 3), capacity: 4 });
+  const marked = renderArray({ cells: cells(1, 2, 3), capacity: 4, brackets: [{ from: 0, to: 2, label: 'mSize = 3' }] });
+  assert.match(marked, /class="bracket"/);
+  assert.match(marked, />mSize = 3<\/text>/);
+  assert.equal(Number(groupFor(marked, 'k0')[3]) > Number(groupFor(plain, 'k0')[3]), true);
+  assert.doesNotMatch(plain, /class="bracket"/);
+});

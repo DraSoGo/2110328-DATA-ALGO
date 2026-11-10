@@ -25,7 +25,7 @@ const library = [
 ];
 
 test('pageRoute parses problem, week, learn, and overview hashes', () => {
-  const base = { page: 'overview', problemId: null, side: null, module: null, week: null };
+  const base = { page: 'overview', problemId: null, side: null, module: null, week: null, view: null };
   assert.deepEqual(pageRoute(''), base);
   assert.deepEqual(pageRoute('#/'), base);
   assert.deepEqual(pageRoute(`#/p/${encodeURIComponent('03_vector/v1')}`), { ...base, page: 'problem', problemId: '03_vector/v1' });
@@ -35,6 +35,8 @@ test('pageRoute parses problem, week, learn, and overview hashes', () => {
   assert.deepEqual(pageRoute('#/learn'), { ...base, page: 'learn' });
   assert.deepEqual(pageRoute('#/learn/data'), { ...base, page: 'learn', side: 'data' });
   assert.deepEqual(pageRoute('#/learn/algo/insertion-sort'), { ...base, page: 'learn', side: 'algo', module: 'insertion-sort' });
+  assert.deepEqual(pageRoute('#/learn/code/map-bst'), { ...base, page: 'learn', side: 'code', module: 'map-bst' });
+  assert.deepEqual(pageRoute('#/learn/data/vector/code'), { ...base, page: 'learn', side: 'data', module: 'vector', view: 'code' });
   assert.deepEqual(pageRoute('#/learn/other'), base);
   assert.deepEqual(pageRoute('#/p/%E0%A4%A'), base);
   assert.deepEqual(pageRoute('#/p/'), base);

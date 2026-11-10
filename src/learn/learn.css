@@ -181,4 +181,15 @@
 .members-panel .is-changed{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent)}
 .members-panel .is-changed dd{color:var(--amber)}
 @media (max-width:1100px){.internals{grid-template-columns:minmax(0,1fr)}}
-
+/* Animation / Code tabs on a Data module */
+.learn-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:0 0 16px}
+.learn-tab{padding:10px 18px;color:var(--muted);text-decoration:none;font:600 13px var(--mono);border-bottom:2px solid transparent;margin-bottom:-1px}
+.learn-tab code{color:inherit;font:12px var(--mono);opacity:.8}
+.learn-tab:hover{color:var(--text)}
+.learn-tab.is-on{color:var(--cyan);border-bottom-color:var(--cyan);background:linear-gradient(to top,var(--cyan-soft),transparent)}
+.op-code-link{margin-left:auto;align-self:center;color:var(--cyan);font:12px var(--mono);text-decoration:none}
+.op-code-link:hover{text-decoration:underline}
+.viz .bracket path{fill:none;stroke:var(--amber);stroke-width:2}
+.viz .bracket text{fill:var(--amber);font-size:13px;font-weight:600}
+/* Every Learning page (animation, code, algo) uses the same wide stage */
+.learn-view{max-width:1680px}
