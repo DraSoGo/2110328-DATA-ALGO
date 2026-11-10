@@ -108,7 +108,7 @@ export default {
     },
     {
       id: 'msize',
-      use: 'mData[mSize] = x;\nmSize++;',
+      use: 'ensureCapacity(mSize + 1);\nmData[mSize] = x;\nmSize++;',
       match: 'size_t mSize;',
       lines: 1,
       kind: 'field',

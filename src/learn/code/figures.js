@@ -19,10 +19,13 @@
 // fields, then to text only.
 
 import list from './figures/list.js';
+import pair from './figures/pair.js';
 import mapAvl from './figures/map-avl.js';
+import map from './figures/map.js';
 import mapBst from './figures/map-bst.js';
 import priorityQueue from './figures/priority-queue.js';
 import queue from './figures/queue.js';
+import set from './figures/set.js';
 import stack from './figures/stack.js';
 import unorderedMap from './figures/unordered-map.js';
 import vector from './figures/vector.js';
@@ -30,11 +33,14 @@ import vector from './figures/vector.js';
 export const FIGURES = {
   vector,
   list,
+  pair,
   stack,
   queue,
   'priority-queue': priorityQueue,
   'map-bst': mapBst,
   'map-avl': mapAvl,
+  set,
+  map,
   'unordered-map': unorderedMap,
 };
 
