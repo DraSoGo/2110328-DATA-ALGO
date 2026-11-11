@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main() {
+int main()
+{
     ios_base::sync_with_stdio(false);
     cin.tie(0);
 
@@ -11,17 +12,20 @@ int main() {
     unordered_map<long long, long long> parent;
     parent.reserve(n * 2);
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         long long f, s;
         cin >> f >> s;
         parent[s] = f;
     }
 
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < m; i++)
+    {
         long long a, b;
         cin >> a >> b;
 
-        if (a == b || !parent.count(a) || !parent.count(b)) {
+        if (a == b || !parent.count(a) || !parent.count(b))
+        {
             cout << "NO\n";
             continue;
         }
@@ -29,7 +33,8 @@ int main() {
         long long pa = parent[a];
         long long pb = parent[b];
 
-        if (!parent.count(pa) || !parent.count(pb)) {
+        if (!parent.count(pa) || !parent.count(pb))
+        {
             cout << "NO\n";
             continue;
         }

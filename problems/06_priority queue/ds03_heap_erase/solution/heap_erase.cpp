@@ -4,6 +4,7 @@
 #include <functional>
 #include <iostream>
 #include <stdexcept>
+#include <bits/stdc++.h>
 
 
 namespace CP {
@@ -123,8 +124,17 @@ class priority_queue
     }
 
     void erase(const T& v) {
-      //erase v from the heap (if exists)
-      //write your code here
+      for (size_t i = 0; i < mSize; i++)
+      {
+        if (mData[i] == v)
+        {
+          mData[i] = mData[mSize-1];
+          mSize--;
+          fixUp(i);
+          fixDown(i);
+          return;
+        }
+      }
     }
 
     void check_and_print() {
