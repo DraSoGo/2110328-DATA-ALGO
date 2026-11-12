@@ -32,6 +32,11 @@ jobs:
       - name: Run tests
         run: npm test
 
+      # Rebuild data/problems.json from problems/ so a forgotten `npm run index`
+      # never fails the deploy; the audit then checks the fresh manifest.
+      - name: Index problems
+        run: npm run index
+
       - name: Audit problem content
         run: npm run lint
 

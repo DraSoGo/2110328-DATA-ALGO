@@ -4047,7 +4047,12 @@
       }
     ],
     "statement": "problems/06_priority queue/d62_q3a_heap_descendant/statement.pdf",
-    "solution": [],
+    "solution": [
+      {
+        "name": "solution.cpp",
+        "path": "problems/06_priority queue/d62_q3a_heap_descendant/solution.cpp"
+      }
+    ],
     "testcases": [
       {
         "id": "01",
