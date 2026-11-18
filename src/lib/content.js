@@ -24,12 +24,18 @@ export function filterProblems(problems, query = '') {
     .includes(needle));
 }
 
+// A solution counts only once it is more than the grader's starter files. Manifests
+// written before `solved` existed fall back to "has any solution file".
+export function isSolved(problem) {
+  return problem.solved ?? problem.solution.length > 0;
+}
+
 export function summarizeProblems(problems) {
   const byName = new Map();
   for (const problem of problems) {
     const entry = byName.get(problem.name) || { statement: false, solution: false, testcases: false };
     entry.statement ||= Boolean(problem.statement);
-    entry.solution ||= problem.solution.length > 0;
+    entry.solution ||= isSolved(problem);
     entry.testcases ||= problem.testcases.length > 0;
     byName.set(problem.name, entry);
   }
@@ -107,7 +113,7 @@ export function truncationLabel(file) {
 export function resourceStatus(problem) {
   return [
     { label: 'PDF', ready: Boolean(problem.statement) },
-    { label: 'SOLUTION', ready: problem.solution.length > 0 },
+    { label: 'SOLUTION', ready: isSolved(problem) },
     { label: 'TESTCASE', ready: problem.testcases.length > 0 },
   ];
 }

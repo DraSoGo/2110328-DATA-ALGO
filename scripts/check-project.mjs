@@ -37,7 +37,7 @@ if (errors.length) {
   console.error(errors.join('\n'));
   process.exitCode = 1;
 } else {
-  const withSolution = problems.filter((problem) => problem.solution.length).length;
+  const withSolution = problems.filter((problem) => problem.solved).length;
   const withTests = problems.filter((problem) => problem.testcases.length).length;
   console.log(`Validated ${problems.length} problem folders: ${withSolution} with solutions, ${withTests} with testcases.`);
 }

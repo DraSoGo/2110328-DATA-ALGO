@@ -1,5 +1,6 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { isStubSource } from './solution-status.mjs';
 
 const SOURCE_EXTENSIONS = new Set(['.cpp', '.h', '.hpp']);
 const byName = (a, b) => a.localeCompare(b, 'en', { numeric: true });
@@ -50,6 +51,15 @@ async function scanSolution(problemPath, prefix) {
   return files;
 }
 
+async function isSolved(problemPath, prefix, solution) {
+  if (!solution.length) return false;
+  for (const file of solution) {
+    const source = await readFile(path.join(problemPath, file.path.slice(prefix.length + 1)), 'utf8');
+    if (isStubSource(source)) return false;
+  }
+  return true;
+}
+
 async function scanTestcases(problemPath, prefix, truncatedList) {
   const truncated = new Set(truncatedList);
   const sides = {};
@@ -85,6 +95,7 @@ export async function scanProblemLibrary(root) {
         throw new Error(`Invalid ${configPath}: ${error.message}`);
       }
       const prefix = `problems/${topicDir}/${problemDir}`;
+      const solution = await scanSolution(problemPath, prefix);
       problems.push({
         id: `${topicDir}/${problemDir}`,
         graderId: config.id ?? null,
@@ -97,7 +108,10 @@ export async function scanProblemLibrary(root) {
         topicOrder: topic.order,
         schedule: (config.schedule || []).filter((entry) => entry.topic === topic.name),
         statement: (await exists(path.join(problemPath, 'statement.pdf'))) ? `${prefix}/statement.pdf` : null,
-        solution: await scanSolution(problemPath, prefix),
+        solution,
+        // false when solution/ only holds the grader's starter files (a placeholder
+        // body such as "// Your code here"); see solution-status.mjs.
+        solved: await isSolved(problemPath, prefix, solution),
         testcases: await scanTestcases(problemPath, prefix, config.testcase_truncated || []),
       });
     }

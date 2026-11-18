@@ -1,6 +1,6 @@
 import {
   adjacentProblems, buildTopicTree, categoryIsOpen, filterProblems, orderedProblems,
-  pageRoute, preserveScrollPosition, resourceStatus, summarizeProblems, truncationLabel,
+  isSolved, pageRoute, preserveScrollPosition, resourceStatus, summarizeProblems, truncationLabel,
 } from './lib/content.js';
 import { highlightCpp } from './lib/cpp-highlight.js';
 import { escapeHtml } from './lib/html.js';
@@ -209,6 +209,7 @@ function learnMarkup(route) {
 function problemMarkup(problem) {
   const adjacent = adjacentProblems(orderedProblems(state.problems), problem.id);
   const hasSolution = problem.solution.length > 0;
+  const solved = isSolved(problem);
   const hasTests = problem.testcases.length > 0;
   const fileCount = t('state.files', { count: problem.solution.length, s: plural(problem.solution.length).toUpperCase() });
   return `<div class="problem-view view-enter">
@@ -216,7 +217,7 @@ function problemMarkup(problem) {
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#/">${escapeHtml(t('crumb.root'))}</a><span>/</span><button type="button" data-jump="t:${escapeHtml(problem.topicDir)}">${escapeHtml(problem.topic)}</button><span>/</span><strong>${escapeHtml(problem.name)}</strong></nav>
     <header class="problem-head">
       <div><code>${escapeHtml(problem.name)}</code><h1>${escapeHtml(problem.title)}</h1>${problem.tags.length ? `<div class="tag-list">${problem.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>` : ''}</div>
-      <div class="artifact-status">${resourceDot(problem.statement, t('res.pdf'))}${resourceDot(hasSolution, t('res.solution'))}${resourceDot(hasTests, t('res.testcase'))}</div>
+      <div class="artifact-status">${resourceDot(problem.statement, t('res.pdf'))}${resourceDot(solved, t('res.solution'))}${resourceDot(hasTests, t('res.testcase'))}</div>
     </header>
     <div class="tab-bar" role="tablist" aria-label="${escapeHtml(t('tab.resources'))}">
       <button role="tab" aria-selected="true" data-tab="statement">${icon('file')}<span>${escapeHtml(t('tab.statement'))}</span><small>${escapeHtml(t(problem.statement ? 'state.ready' : 'state.missing'))}</small></button>

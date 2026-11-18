@@ -103,3 +103,10 @@ test('resourceStatus lists PDF, solution, and testcase availability in order', (
   assert.deepEqual(resourceStatus(library[0]).map((item) => [item.label, item.ready]), [['PDF', true], ['SOLUTION', true], ['TESTCASE', false]]);
   assert.deepEqual(resourceStatus(library[5]).map((item) => item.ready), [false, false, false]);
 });
+
+test('a starter-only solution does not count as solved', () => {
+  const starter = { ...library[0], solved: false };
+  assert.equal(resourceStatus(starter).find((item) => item.label === 'SOLUTION').ready, false);
+  assert.equal(summarizeProblems([starter]).solutions, 0);
+  assert.equal(summarizeProblems([{ ...starter, solved: true }]).solutions, 1);
+});
