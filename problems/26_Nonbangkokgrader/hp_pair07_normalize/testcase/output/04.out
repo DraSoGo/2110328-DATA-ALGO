@@ -1,0 +1,85 @@
+G a xi 1
+T hs hs 1
+T ozk q 1
+N ozk q 1 | ozk q 1
+G cnyju hs 1
+F cnyju ozk 1 | cnyju ozk 1
+N jufqbm vgrc 1 | jufqbm vgrc 1
+N hs hs 1 | hs hs 1
+G xi xi 1
+N q q 1 | q q 1
+A hs hs 1
+N hs hs 1 | hs hs 1
+N xi xi 1 | xi xi 1
+A ozk q 1
+N a xi 1 | a xi 1
+N cnyju ozk 1 | cnyju ozk 1
+A vgrc xi 1
+F a xi 1 | a xi 1
+N ozk q 1 | ozk q 1
+T cnyju ozk 1
+G hs xi 1
+T jufqbm xi 1
+C a xi 1 | a xi 1
+N a xi 1 | a xi 1
+N a xi 1 | a xi 1
+N hs hs 1 | hs hs 1
+T ozk ozk 1
+N hs hs 1 | hs hs 1
+N jufqbm vgrc 1 | jufqbm vgrc 1
+T jufqbm vgrc 1
+N hs hs 1 | hs hs 1
+T hs xi 1
+N xi xi 1 | xi xi 1
+F cnyju ozk 1 | cnyju ozk 1
+T jufqbm vgrc 1
+N ozk q 1 | ozk q 1
+N xi xi 1 | xi xi 1
+N q xi 1 | q xi 1
+G vgrc vgrc 1
+T xi xi 1
+N ozk ozk 1 | ozk ozk 1
+C jufqbm vgrc 1 | jufqbm vgrc 1
+N jufqbm vgrc 1 | jufqbm vgrc 1
+T a xi 1
+G jufqbm jufqbm 1
+C vgrc vgrc 1 | vgrc vgrc 1
+T jufqbm jufqbm 1
+N a xi 1 | a xi 1
+N a xi 1 | a xi 1
+F hs hs 1 | hs hs 1
+C hs hs 1 | hs hs 1
+T vgrc xi 1
+N xi xi 1 | xi xi 1
+G ozk q 1
+N jufqbm vgrc 1 | jufqbm vgrc 1
+N q vgrc 1 | q vgrc 1
+T q vgrc 1
+N hs hs 1 | hs hs 1
+T ozk q 1
+N ozk q 1 | ozk q 1
+T ozk q 1
+N ozk q 1 | ozk q 1
+N q vgrc 1 | q vgrc 1
+T cnyju ozk 1
+S 16 16 14725631246606194040
+N -3999790534 -3999581076 1 | -3999790534 -3999581076 1
+G -3999266889 -3999266889 1
+C -3999685805 -3999685805 1 | -3999685805 -3999685805 1
+C -3999999992 -3999685805 1 | -3999685805 -3999999992 0
+C -3999266889 -3999266889 1 | -3999266889 -3999266889 1
+C -3999581076 -3999266889 1 | -3999581076 -3999266889 1
+T -3999476347 -3999371618 1
+T -3999685805 -3999476347 1
+N -3999476347 -3999371618 1 | -3999476347 -3999371618 1
+N -3999581076 -3999266889 1 | -3999581076 -3999266889 1
+T -3999371618 -3999371618 1
+G -3999999992 -3999999992 1
+C -3999790534 -3999790534 1 | -3999790534 -3999790534 1
+N -3999476347 -3999371618 1 | -3999476347 -3999371618 1
+T -3999790534 -3999790534 1
+G -3999895263 -3999895263 1
+N -3999790534 -3999790534 1 | -3999790534 -3999790534 1
+T -3999790534 -3999790534 1
+N -3999476347 -3999266889 1 | -3999476347 -3999266889 1
+F -3999790534 -3999685805 1

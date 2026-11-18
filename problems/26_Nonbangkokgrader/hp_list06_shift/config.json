@@ -1,0 +1,20 @@
+{
+  "id": null,
+  "name": "hp_list06_shift",
+  "title": "List Shift",
+  "tags": [
+    ".h",
+    "list"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/03.in",
+    "output/03.out",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out",
+    "output/07.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

@@ -1,0 +1,24 @@
+{
+  "id": null,
+  "name": "hp_pq06_descendants",
+  "title": "Priority Queue Descendants",
+  "tags": [
+    ".h",
+    "heap"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/03.in",
+    "input/04.in",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ],
+  "source": "Nonbangkokgrader"
+}

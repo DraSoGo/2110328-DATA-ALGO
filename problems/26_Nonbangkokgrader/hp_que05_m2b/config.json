@@ -1,0 +1,26 @@
+{
+  "id": null,
+  "name": "hp_que05_m2b",
+  "title": "Queue Move To Back",
+  "tags": [
+    ".h",
+    "Queue"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out",
+    "input/07.in",
+    "output/07.out",
+    "input/08.in",
+    "output/08.out",
+    "input/09.in",
+    "output/09.out",
+    "input/10.in",
+    "output/10.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

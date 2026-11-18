@@ -1,0 +1,47 @@
+S 0
+S 2073 142 1315
+S 88000 122 88102
+S 88000 142 87042
+S 176000 122 88102
+S 0
+F 0 0 0
+S 175998 124 88101
+S 2 37100 37100
+F 175998 1665518761442194918 4451628248913275986
+F 2 37101148404 37101148404
+S 0
+F 1 4249972470144843588 4249972470144843588
+C F 0 0 0
+A 1 0 0
+F 2 9163419308114601946 1711813506747614550
+E aaabmi
+S 0
+F 13 16195657285381526695 11592537194312753735
+E aaabmd aaabmf aaabmf aaabmg aaabmi aaabmi aaabmi aaabml aaabml aaabml aaabml aaabml aaabmm
+F 1 4249955977470420423 4249955977470420423
+E aaabmd aaabmf aaabmf aaabmg aaabmi aaabmi aaabmi aaabml aaabml aaabml aaabml aaabml aaabmm
+S 14 aaabmd aaabmm
+E aaabmd aaabmf aaabmf aaabmf aaabmg aaabmg aaabmg aaabmg aaabmg aaabmi aaabmi aaabmi aaabml aaabml aaabml aaabml aaabml aaabmm
+E aaabmf aaabmi aaabmi aaabmj aaabmj
+S 4 aaabme aaabmi
+E aaabmd aaabme aaabmf aaabmg aaabmi
+F 6 3562696064361322974 9225465395324438930
+S 6 aaabmd aaabmi
+F 6 3562696064361322974 9225465395324438930
+F 23 12417371110543252723 4076310928622936387
+E aaabmd aaabmf aaabmf aaabmf aaabmf aaabmg aaabmg aaabmg aaabmg aaabmg aaabmi aaabmi aaabmi aaabmi aaabmi aaabmj aaabmj aaabml aaabml aaabml aaabml aaabml aaabmm
+E aaabmd aaabme aaabmf aaabmg aaabmi aaabmi
+S 23 aaabmd aaabmm
+E aaabmd aaabmf aaabmf aaabmf aaabmf aaabmg aaabmg aaabmg aaabmg aaabmg aaabmi aaabmi aaabmi aaabmi aaabmi aaabmj aaabmj aaabml aaabml aaabml aaabml aaabml aaabmm
+S 9 aaabmr aaabmx
+S 3 aaabmu aaabmu
+F 2 13806499691184909733 12706985863950653311
+S 43 aaabma aaabmx
+E aaabma aaabmd aaabmd aaabme aaabmf aaabmf aaabmf aaabmf aaabmf aaabmg aaabmg aaabmg aaabmg aaabmg aaabmg aaabmi aaabmi aaabmi aaabmi aaabmi aaabmi aaabmi aaabmj aaabmj aaabmk aaabml aaabml aaabml aaabml aaabml aaabmm aaabmn aaabmr aaabmu aaabmu aaabmu aaabmu aaabmx aaabmx aaabmx aaabmx aaabmx aaabmx
+E
+C F 0 0 0
+A 1 0 0
+F 56 368312698333133502 8042695069010896226
+S 70 aaablz aaabnn
+S 71 aaablw aaabnn
+E aaablw aaablz aaabma aaabma aaabmb aaabmb aaabmd aaabmd aaabme aaabmf aaabmf aaabmf aaabmf aaabmf aaabmf aaabmg aaabmg aaabmg aaabmg aaabmg aaabmg aaabmh aaabmi 

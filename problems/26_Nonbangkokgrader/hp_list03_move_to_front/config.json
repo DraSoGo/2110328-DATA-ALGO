@@ -1,0 +1,26 @@
+{
+  "id": null,
+  "name": "hp_list03_move_to_front",
+  "title": "List Move to Front",
+  "tags": [
+    ".h",
+    "list"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/02.in",
+    "output/02.out",
+    "input/03.in",
+    "output/03.out",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out",
+    "output/07.out",
+    "output/08.out",
+    "output/09.out",
+    "output/10.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

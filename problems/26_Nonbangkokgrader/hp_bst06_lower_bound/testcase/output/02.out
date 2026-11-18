@@ -1,0 +1,101 @@
+L 0 376
+L 8 307
+N end
+L 0 376
+L 8 307
+L 8 307
+L 0 376
+T 3 1 1 11120978029395816964
+L 0 376
+K 0 6 8
+L -1 225
+L -1 225
+K -1 0 6 8
+N 0
+N 0
+N 8
+L 6 862
+L 6 862
+L 8 307
+K -3 -1 0 6 8
+N 8
+L 8 841
+K -3 -1 0 6 8
+L 3 815
+L -3 232
+N -1
+N 0
+L 6 950
+L 3 815
+L 3 815
+N -3
+L 8 795
+T 6 1 1 13146432473121175770
+K f fd
+K f fd
+L f 767
+L f 176
+K f fce fd
+N ec
+L dcd 835
+N fce
+L fce 676
+N fdc
+L dcd 835
+L dcd 835
+L ec 720
+L bd 565
+L bd 565
+T 8 1 1 16657024642644277445
+T 10 1 1 16912931499202842531
+N f
+T 11 1 1 6429403241269079282
+N dcd
+L dcd 835
+L cee 110
+K aad bd c cee dcd ec f fce fda fdc
+T 10 1 1 5083866130615707603
+T 10 1 1 5083866130615707603
+L f 452
+L ec 720
+L aad 863
+L bd 565
+L fda 191
+L f 452
+N end
+L cee 110
+L dcd 835
+N bd
+T 12 1 1 10294354220501905353
+L 2 400
+L end
+L end
+T 1 1 1 3000409
+L end
+L 2 400
+N -1
+T 1 1 1 3000409
+L end
+N end
+L end
+L 2 400
+T 3 1 1 11279193176145730221
+N end
+L end
+N end
+L end
+N end
+N end
+L 6 833
+L end
+N end
+N end
+T 3 1 1 12278694173128726121
+N end
+N end
+L 7 325
+L end
+L end
+K 8 7 6 -3
+N end
+T 5 1 1 12164805488846533131

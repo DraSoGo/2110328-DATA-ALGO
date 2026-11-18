@@ -1,0 +1,26 @@
+{
+  "id": null,
+  "name": "hp_bst10_rebalance",
+  "title": "BST Rebalance",
+  "tags": [
+    ".h",
+    "bst"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "output/01.out",
+    "input/02.in",
+    "output/02.out",
+    "input/03.in",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ],
+  "source": "Nonbangkokgrader"
+}

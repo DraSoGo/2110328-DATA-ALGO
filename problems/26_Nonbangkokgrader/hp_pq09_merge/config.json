@@ -1,0 +1,21 @@
+{
+  "id": null,
+  "name": "hp_pq09_merge",
+  "title": "Priority Queue Merge",
+  "tags": [
+    ".h",
+    "heap"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/03.in",
+    "output/03.out",
+    "output/06.out",
+    "output/07.out",
+    "output/08.out",
+    "output/09.out",
+    "output/10.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

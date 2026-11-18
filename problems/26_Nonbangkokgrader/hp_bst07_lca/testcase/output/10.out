@@ -1,0 +1,174 @@
+T 3241 1 1 13864501551370714380
+X 0 1 1
+A 0 887
+A -10 708
+A 10 909
+A 0 887
+A 0 887
+X 16000 1 1
+X -4740 1 1
+A 0 887
+X -14860 1 1
+A 0 887
+X -1170 1 1
+A 0 887
+X 15700 1 1
+A 0 887
+X 10560 1 1
+A 0 887
+X 2170 1 1
+A 0 887
+Q 10640883079344992828 0
+Q 13204686166999069738 0
+A -10 708
+Q 359096434930044582 0
+X -10 1 1
+T 3238 1 1 15794268597551675058
+T 16000 1 1 4201868585137317893
+X 978711119 1 1
+X -51467800 1 1
+A -51467800 2
+A -51467800 2
+A 978711119 1
+A 791079726 4
+A -51467800 2
+A -51467800 2
+Q 15536029060436629734 0
+Q 17771279012183107966 0
+Q 17779319942991925054 0
+T 15999 1 1 11199776341997864262
+A absent
+A absent
+X absent
+A absent
+A absent
+A absent
+A absent
+X absent
+A absent
+T 0 1 1 0
+A absent
+X bh 1 1
+A bh 866
+A bh 866
+A bh 866
+X bh 1 1
+A bh 866
+A bh 866
+X absent
+X bh 1 1
+A cg 991
+X cg 1 1
+X cg 1 1
+X cg 1 1
+A bh 866
+A bh 866
+X absent
+X cg 1 1
+A bh 866
+A bh 866
+X bh 1 1
+A bh 866
+A bh 866
+X bh 1 1
+A bh 866
+A bh 866
+K bh
+A bh 866
+X ddh 1 1
+A bh 866
+A bh 866
+A ch 496
+A bh 866
+A ch 496
+X ch 1 1
+X absent
+A ch 496
+A cha 587
+A ch 496
+T 4 1 1 3285608148781042279
+A ch 496
+X absent
+A bh 866
+X bh 1 1
+X ch 1 1
+X ch 1 1
+A bh 866
+T 6 1 1 1970176009562116841
+X ch 1 1
+A ch 496
+A gegh 178
+A bh 866
+X ch 1 1
+A dec 879
+X cfad 1 1
+A bh 866
+A dec 879
+A dec 879
+A absent
+A bh 866
+A bh 866
+A bh 866
+A gegh 178
+A cfad 601
+A dec 879
+A gegh 178
+A bh 866
+X bh 1 1
+A ch 496
+A absent
+X cha 1 1
+A ch 496
+A bh 866
+A bh 866
+A bh 866
+A absent
+A bh 866
+A h 447
+X cha 1 1
+A absent
+X bh 1 1
+X gegh 1 1
+A absent
+T 13 1 1 11388843565357180071
+A bh 866
+X dec 1 1
+A absent
+A fa 160
+A ch 496
+X cha 1 1
+A bd 71
+A dec 879
+A absent
+A gegh 178
+A gegh 178
+X gegh 1 1
+X dec 1 1
+A gegh 178
+A gegh 178
+A ch 496
+A dec 879
+X bh 1 1
+A ch 83
+A ch 83
+A eab 844
+X cfad 1 1
+X ch 1 1
+T 17 1 1 16947123947722873284
+X absent
+A eab 844
+A bh 866
+A ch 83
+A ch 83
+A ch 83
+K bd bh ca cfa cfad cfc ch cha dag ddh dec eaa eab eh fa fgb gegh h hg hhe
+A ch 83
+A bh 866
+A bh 866
+K bd bh ca cfa cfad cfc ch cha dag ddh dec eaa eab eh fa fgb gegh h hg hhe
+A ch 83
+A absent
+A ch 83
+A dec 879
+A cha 587
+A ch 8

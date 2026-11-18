@@ -1,0 +1,155 @@
+X absent
+A 4 28
+K 4
+T 0 1 1 0
+K
+X absent
+X absent
+K
+T 0 1 1 0
+X 4 1 1
+A 4 846
+K 4 58
+A 4 846
+A 4 846
+K -48 4 58
+A 4 846
+T 3 1 1 3089029162322688129
+A 4 846
+A 4 846
+A 4 846
+A 4 846
+T 4 1 1 15428811471504049703
+X -48 1 1
+K -48 -42 4 58
+A 4 846
+X 4 1 1
+T 4 1 1 5213326452838551640
+A -42 9
+A -48 340
+T 5 1 1 13205836429411833440
+A 39 882
+X -39 1 1
+X -48 1 1
+A 39 882
+X -48 1 1
+X 39 1 1
+A 39 882
+X -48 1 1
+X 39 1 1
+T 6 1 1 7614950365778032645
+A 39 882
+K -48 -42 -39 4 9 39
+A 4 719
+X -48 1 1
+A 39 882
+T 7 1 1 14031396006790079244
+K -48 -42 -39 4 9 39 51
+A 39 882
+A -39 820
+K -48 -42 -39 4 39 51
+A -39 820
+T 6 1 1 12360859748866861768
+A 39 882
+A 39 882
+K -48 -42 -39 4 39 51
+A 39 739
+K -48 -42 -39 -1 4 39 51
+A -42 9
+T 7 1 1 4938129591616562761
+K gg
+A gg 451
+A gg 451
+K bhbd fch gg
+T 4 1 1 9902814190399167775
+K edg fch gg
+A gg 451
+K edg fch gg
+A gg 451
+A gg 451
+X gg 1 1
+X gg 1 1
+K edg fch gg gha
+A gha 602
+A gha 602
+X fch 1 1
+X edg 1 1
+X edg 1 1
+A edg 219
+A gha 602
+A gha 602
+A gha 602
+A de 114
+A de 114
+K bhbd de e edg gg gha
+X e 1 1
+A de 359
+A e 427
+X edg 1 1
+A gha 602
+A gha 602
+A gha 602
+X e 1 1
+A e 450
+X gha 1 1
+T 7 1 1 11588967484542054312
+A e 450
+A edg 211
+X de 1 1
+K bdd bhbd de e edg fch gg gha
+K bdd bhbd de e edg fch gg gha
+K bdd bhbd de e edg fch gg gha
+K bdd bhbd de e edg fch gg gha
+X de 1 1
+A bhbd 848
+A gg 672
+T 8 1 1 2168972555574862276
+A absent
+A absent
+A absent
+A absent
+K
+A absent
+K
+A absent
+A absent
+A absent
+A 27 526
+A 27 526
+X 27 1 1
+A 27 526
+T 3 1 1 4619836351967757782
+A 27 526
+A -1 754
+A 27 526
+X -1 1 1
+X 27 1 1
+A 27 526
+A 27 526
+X 27 1 1
+T 3 1 1 4619836351967757408
+K 27 -1 -51
+A -1 754
+X -1 1 1
+A -1 754
+A 39 305
+T 2 1 1 3107176855490901347
+K 39 -1
+T 2 1 1 3107176855490901347
+A -1 754
+A absent
+T 0 1 1 0
+A absent
+A absent
+X absent
+X absent
+A absent
+X absent
+A absent
+A absent
+A absent
+A 27 811
+A 27 811
+X 27 1 1
+A 39 486
+T 3 1 1 11211135944439172347

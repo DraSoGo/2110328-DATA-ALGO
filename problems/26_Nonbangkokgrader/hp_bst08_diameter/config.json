@@ -1,0 +1,21 @@
+{
+  "id": null,
+  "name": "hp_bst08_diameter",
+  "title": "BST Diameter",
+  "tags": [
+    ".h",
+    "bst"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/04.in",
+    "input/05.in",
+    "input/06.in",
+    "input/07.in",
+    "input/08.in",
+    "input/09.in",
+    "input/10.in"
+  ],
+  "source": "Nonbangkokgrader"
+}

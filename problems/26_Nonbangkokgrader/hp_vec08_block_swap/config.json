@@ -1,0 +1,17 @@
+{
+  "id": null,
+  "name": "hp_vec08_block_swap",
+  "title": "Vector Block Swap",
+  "tags": [
+    ".h",
+    "vector"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "output/04.out",
+    "input/05.in",
+    "output/05.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

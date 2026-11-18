@@ -1,0 +1,174 @@
+T 3201 1 1 5790237278607629861
+X 0 1 1
+A 0 321
+A -10 468
+A 10 52
+A 0 321
+A 0 321
+X 15800 1 1
+X 3970 1 1
+A 0 321
+X -10650 1 1
+A 0 321
+X 7310 1 1
+A 0 321
+X 5160 1 1
+A 0 321
+X 380 1 1
+A 0 321
+X -3650 1 1
+A 0 321
+Q 8430375738910523352 0
+Q 4821794931882130298 0
+A -10 468
+Q 16304134718458799110 0
+X -10 1 1
+T 3198 1 1 11568383991396888402
+T 14000 1 1 3563159952003144897
+X 845898727 1 1
+X 845898727 1 1
+A -212531567 4
+A 7429849 8
+A 845898727 1
+A 7429849 8
+A 718505892 34
+A -212531567 4
+Q 2150038907393858540 0
+Q 8633147296904703366 0
+Q 9146740301465291299 0
+T 13999 1 1 3598271193492633330
+A absent
+A absent
+A absent
+A absent
+K
+X absent
+X absent
+A absent
+A absent
+A absent
+X a 1 1
+T 2 1 1 17298898010815942472
+A ab 515
+A ab 515
+A a 761
+A ab 515
+A ae 926
+A ab 515
+A absent
+A ae 926
+A ae 926
+A absent
+A caeh 145
+A absent
+A eae 857
+X absent
+A ae 926
+A absent
+X ae 1 1
+T 5 1 1 11193636241265033766
+X eae 1 1
+K a ae beh caeh eae
+A ae 926
+A ae 926
+A ae 926
+X ae 1 1
+A absent
+T 5 1 1 11193636241265033766
+A absent
+X ae 1 1
+X ae 1 1
+A ae 926
+A beh 809
+A a 717
+X a 1 1
+X ha 1 1
+A beh 809
+A ha 902
+A ha 902
+A beh 809
+A beh 809
+A beh 809
+A absent
+A a 717
+X beh 1 1
+A absent
+T 3 1 1 6635956932963313009
+X absent
+K a beh ha
+A beh 809
+T 3 1 1 6635956932963313009
+X ha 1 1
+A beh 809
+A beh 809
+A beh 809
+A a 717
+A beh 809
+A beh 809
+A beh 809
+A chdb 258
+X a 1 1
+X chdb 1 1
+A beh 809
+A absent
+X beh 1 1
+A chdb 258
+A ha 508
+A a 717
+A chdb 258
+A chdb 258
+A chdb 258
+X chdb 1 1
+X chdb 1 1
+A absent
+A ha 508
+A chdb 258
+X a 1 1
+X chdb 1 1
+X absent
+A cf 203
+X chdb 1 1
+A ha 508
+A a 717
+A chdb 258
+X chdb 1 1
+K a cf chdb ha
+X ha 1 1
+K a cf chdb ha
+A cf 203
+A absent
+A ha 508
+X bd 1 1
+X chdb 1 1
+A fdac 950
+A fdac 950
+A a 717
+T 4 1 1 10836672911991695689
+A a 717
+A fdac 950
+A absent
+A fdac 950
+X a 1 1
+X ha 1 1
+T 6 1 1 14566845418483794898
+A fdac 390
+A a 717
+A fdac 390
+A fdac 390
+A fdac 390
+A ha 508
+A cf 203
+X fdac 1 1
+A fdac 390
+X cf 1 1
+X a 1 1
+X fdac 1 1
+A cf 203
+A fdac 390
+A a 717
+T 9 1 1 10554567598775187426
+X cf 1 1
+A absent
+T 10 1 1 2165323903663644504
+A ha 508
+A fdac

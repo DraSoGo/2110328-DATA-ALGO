@@ -1,0 +1,21 @@
+{
+  "id": null,
+  "name": "hp_bst01_leaves",
+  "title": "BST Count Leaves",
+  "tags": [
+    ".h",
+    "bst"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/03.in",
+    "output/03.out",
+    "input/04.in",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

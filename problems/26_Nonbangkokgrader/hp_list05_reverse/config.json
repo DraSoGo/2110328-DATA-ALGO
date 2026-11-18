@@ -1,0 +1,22 @@
+{
+  "id": null,
+  "name": "hp_list05_reverse",
+  "title": "List Reverse",
+  "tags": [
+    ".h",
+    "list"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "input/03.in",
+    "output/03.out",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out",
+    "input/06.in",
+    "output/06.out",
+    "output/08.out"
+  ],
+  "source": "Nonbangkokgrader"
+}

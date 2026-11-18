@@ -1,0 +1,18 @@
+{
+  "id": null,
+  "name": "hp_vec05_insert",
+  "title": "Vector Insert",
+  "tags": [
+    ".h",
+    "vector"
+  ],
+  "topic": null,
+  "schedule": [],
+  "testcase_truncated": [
+    "output/03.out",
+    "output/04.out",
+    "input/05.in",
+    "output/05.out"
+  ],
+  "source": "Nonbangkokgrader"
+}
